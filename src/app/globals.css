@@ -40,6 +40,10 @@ body {
   @apply rounded-[20px] bg-white shadow-[0_18px_50px_rgba(16,24,40,0.08)] border border-[var(--line)];
 }
 
+.panel {
+  @apply rounded-[24px] border border-[var(--line)] bg-white;
+}
+
 .card-lift {
   transition:
     transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
@@ -159,14 +163,63 @@ body {
   animation: gradient-pan 7s ease-in-out infinite;
 }
 
+@keyframes draw-ring {
+  from {
+    stroke-dashoffset: var(--ring-circ);
+  }
+  to {
+    stroke-dashoffset: var(--ring-offset);
+  }
+}
+
+.ats-ring {
+  stroke-dashoffset: var(--ring-circ);
+}
+
+.hero-enter .ats-ring,
+.reveal.is-visible .ats-ring {
+  animation: draw-ring 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+.ats-radar {
+  opacity: 0;
+  transform-origin: 180px 140px;
+  transform: scale(0.86);
+}
+
+.hero-enter .ats-radar,
+.reveal.is-visible .ats-radar {
+  animation: radar-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+
+@keyframes radar-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
   .hero-enter,
-  .gradient-drift {
+  .gradient-drift,
+  .hero-enter .ats-ring,
+  .hero-enter .ats-radar,
+  .reveal.is-visible .ats-ring,
+  .reveal.is-visible .ats-radar {
     animation: none;
+  }
+
+  .ats-ring {
+    stroke-dashoffset: var(--ring-offset);
+  }
+
+  .ats-radar {
+    opacity: 1;
+    transform: none;
   }
 
   .reveal {
