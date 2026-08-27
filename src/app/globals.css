@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mint: #20fc8f;
+  --ink: #000000;
+  --gold: #fdb833;
+  --paper: #f7f8fa;
+  --card: #ffffff;
+  --muted: #5b6470;
+  --line: #e4e8ee;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Roboto", system-ui, sans-serif;
+}
+
+.mesh-hero {
+  background:
+    radial-gradient(900px 420px at 12% -10%, rgba(32, 252, 143, 0.35), transparent 58%),
+    radial-gradient(800px 380px at 90% 0%, rgba(253, 184, 51, 0.28), transparent 55%),
+    #ffffff;
+}
+
+.mesh-cta {
+  background:
+    radial-gradient(700px 280px at 0% 0%, rgba(32, 252, 143, 0.55), transparent 60%),
+    radial-gradient(700px 280px at 100% 100%, rgba(253, 184, 51, 0.5), transparent 60%),
+    linear-gradient(135deg, #0f1720 0%, #163028 100%);
+}
+
+.card {
+  @apply rounded-[20px] bg-white shadow-[0_18px_50px_rgba(16,24,40,0.08)] border border-[var(--line)];
+}
+
+.card-lift {
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(16, 24, 40, 0.13);
+  border-color: rgba(32, 252, 143, 0.45);
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-neutral-800;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-full border border-black/15 bg-white px-5 py-2.5 text-sm font-medium text-black hover:bg-neutral-50;
+}
+
+.btn-primary,
+.btn-secondary {
+  transition:
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(16, 24, 40, 0.16);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 10px rgba(16, 24, 40, 0.12);
+}
+
+.pill {
+  @apply inline-flex items-center rounded-full border border-black/10 bg-white/80 px-3 py-1 text-xs font-medium text-neutral-700 backdrop-blur;
+}
+
+/* --- Motion --- */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero entrance: staggered fade-up on first paint */
+.hero-enter {
+  animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-enter-1 { animation-delay: 0.05s; }
+.hero-enter-2 { animation-delay: 0.15s; }
+.hero-enter-3 { animation-delay: 0.25s; }
+.hero-enter-4 { animation-delay: 0.35s; }
+.hero-enter-5 { animation-delay: 0.5s; }
+
+/* Scroll-triggered reveal (paired with the Reveal component) */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* FAQ answer expand/collapse */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-answer.open {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer > * {
+  overflow: hidden;
+}
+
+.faq-icon {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-icon.open {
+  transform: rotate(45deg);
+}
+
+/* Slow ambient pan for gradient accents */
+@keyframes gradient-pan {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.gradient-drift {
+  background-size: 200% 200%;
+  animation: gradient-pan 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-enter,
+  .gradient-drift {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .card-lift,
+  .btn-primary,
+  .btn-secondary,
+  .faq-answer,
+  .faq-icon {
+    transition: none;
+  }
+
+  .card-lift:hover,
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    transform: none;
+  }
+}
