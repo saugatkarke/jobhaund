@@ -52,7 +52,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="mt-1 w-full rounded-xl border border-black/10 px-3 py-2"
+            className="field"
           />
         </label>
         <label className="block text-sm">
@@ -61,7 +61,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
             name="password"
             type="password"
             required
-            className="mt-1 w-full rounded-xl border border-black/10 px-3 py-2"
+            className="field"
           />
         </label>
         <button type="submit" className="btn-primary w-full" disabled={pending}>
@@ -110,15 +110,15 @@ export function SignupForm() {
     <form className="space-y-3" onSubmit={onSubmit}>
       <label className="block text-sm">
         Name
-        <input name="name" required className="mt-1 w-full rounded-xl border border-black/10 px-3 py-2" />
+        <input name="name" required className="field" />
       </label>
       <label className="block text-sm">
         Email
-        <input name="email" type="email" required className="mt-1 w-full rounded-xl border border-black/10 px-3 py-2" />
+        <input name="email" type="email" required className="field" />
       </label>
       <label className="block text-sm">
         Password
-        <input name="password" type="password" required minLength={8} className="mt-1 w-full rounded-xl border border-black/10 px-3 py-2" />
+        <input name="password" type="password" required minLength={8} className="field" />
       </label>
       <button type="submit" className="btn-primary w-full" disabled={pending}>
         Create account
@@ -158,7 +158,7 @@ export function ForgotForm() {
     <form className="space-y-3" onSubmit={onSubmit}>
       <label className="block text-sm">
         Email
-        <input name="email" type="email" required className="mt-1 w-full rounded-xl border border-black/10 px-3 py-2" />
+        <input name="email" type="email" required className="field" />
       </label>
       <button type="submit" className="btn-primary w-full" disabled={pending}>
         Send reset link
@@ -194,7 +194,7 @@ export function ResetForm({ token }: { token: string }) {
     <form className="space-y-3" onSubmit={onSubmit}>
       <label className="block text-sm">
         New password
-        <input name="password" type="password" required minLength={8} className="mt-1 w-full rounded-xl border border-black/10 px-3 py-2" />
+        <input name="password" type="password" required minLength={8} className="field" />
       </label>
       <button type="submit" className="btn-primary w-full" disabled={pending}>
         Set new password

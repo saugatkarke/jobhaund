@@ -62,6 +62,41 @@ export function IconEyeOff({ className }: IconProps) {
   );
 }
 
+export function IconSaveTrackOrbit({ className }: IconProps) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden={true}
+      data-icon="save-track-orbit"
+    >
+      <circle cx="12" cy="12" r="2.6" fill="#4F46E5" stroke="black" strokeWidth="1.15" />
+      <path
+        d="M5.6 11.3c1.2-3.3 4.5-5.8 7.8-5.9 2.1-.1 3.8.9 4.2 2.7.5 2.2-1 4.9-3.7 6.8-2.7 1.9-5.8 2.8-8 2.1-1.6-.5-2.3-1.8-2-3.3.2-.9.8-1.7 1.7-2.4Z"
+        fill="white"
+        stroke="black"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 5.7c1.7-.7 3.9-.8 5.9-.2 3 .9 5.3 2.9 6 5.1.5 1.6.1 3.1-1 4.1-1.6 1.4-4.6 1.5-7.7.3-2.9-1.1-5.2-3.2-5.8-5.4"
+        fill="white"
+        stroke="black"
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10.4 17.3c1.3-.1 2.8-.8 4.1-1.8 1.6-1.1 2.8-2.4 3.5-3.7.4 1.6 0 3.2-1.3 4.5-1.7 1.7-4.5 2.3-6.7 1.7l.4-.7Z"
+        fill="black"
+      />
+    </svg>
+  );
+}
+
 export function IconScan({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>
@@ -99,6 +134,34 @@ export function IconUser({ className }: IconProps) {
         stroke="currentColor"
         strokeWidth="1.75"
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function IconChevronUp({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path
+        d="M6 14.5 12 8.5l6 6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function IconChevronDown({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path
+        d="M6 9.5 12 15.5l6-6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

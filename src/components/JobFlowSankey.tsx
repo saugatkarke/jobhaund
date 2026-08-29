@@ -1,0 +1,325 @@
+"use client";
+
+import { useLayoutEffect, useRef, useState } from "react";
+
+type Job = {
+  id: string;
+  title: string;
+  ats: number;
+  share: number;
+  color: string;
+  outcome: string;
+};
+
+type Outcome = {
+  id: string;
+  title: string;
+  badge?: string;
+  barColor?: string;
+};
+
+type Ribbon = {
+  key: string;
+  jobId: string;
+  x0: number;
+  y0: number;
+  h0: number;
+  x1: number;
+  y1: number;
+  h1: number;
+};
+
+const JOBS: Job[] = [
+  { id: "fe", title: "Frontend Engineer", ats: 72, share: 22, color: "#F472B6", outcome: "interview" },
+  { id: "de", title: "Data Engineer", ats: 64, share: 18, color: "#34D399", outcome: "noreply" },
+  { id: "pm", title: "Product Manager", ats: 81, share: 24, color: "#A78BFA", outcome: "offer" },
+  { id: "ml", title: "ML Engineer", ats: 77, share: 20, color: "#60A5FA", outcome: "interview" },
+  { id: "ux", title: "UX Designer", ats: 69, share: 16, color: "#FDB833", outcome: "rejected" },
+];
+
+const OUTCOMES: Outcome[] = [
+  { id: "interview", title: "Interview", badge: "In pipeline" },
+  { id: "offer", title: "Offer" },
+  { id: "noreply", title: "No reply" },
+  { id: "rejected", title: "Rejected", barColor: "#7F1D1D" },
+];
+
+const RESULT_BAR = "#14B8A6";
+
+function outcomeCount(id: string) {
+  return JOBS.filter((job) => job.outcome === id).length;
+}
+
+function ribbonPath(x0: number, y0: number, h0: number, x1: number, y1: number, h1: number) {
+  const mid = (x0 + x1) / 2;
+  return `M${x0},${y0}C${mid},${y0} ${mid},${y1} ${x1},${y1}L${x1},${y1 + h1}C${mid},${y1 + h1} ${mid},${y0 + h0} ${x0},${y0 + h0}Z`;
+}
+
+function relativeRect(el: HTMLElement, root: HTMLElement) {
+  const a = el.getBoundingClientRect();
+  const b = root.getBoundingClientRect();
+  return {
+    x: a.left - b.left,
+    y: a.top - b.top,
+    w: a.width,
+    h: a.height,
+  };
+}
+
+function sliceHeight(total: number, index: number, count: number) {
+  const start = (total * index) / count;
+  const end = (total * (index + 1)) / count;
+  return { yOffset: start, height: Math.max(end - start, 1) };
+}
+
+export function JobFlowSankey() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const sourceRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const midRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const targetRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [ribbons, setRibbons] = useState<Ribbon[]>([]);
+  const [size, setSize] = useState({ width: 1, height: 1 });
+  const [hoverJob, setHoverJob] = useState<string | null>(null);
+  const [hoverOutcome, setHoverOutcome] = useState<string | null>(null);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const measure = () => {
+      const next: Ribbon[] = [];
+      const incomingIndex: Record<string, number> = {};
+
+      for (const job of JOBS) {
+        const source = sourceRefs.current[job.id];
+        const mid = midRefs.current[job.id];
+        const target = targetRefs.current[job.outcome];
+        if (!source || !mid || !target) continue;
+
+        const s = relativeRect(source, root);
+        const m = relativeRect(mid, root);
+        const t = relativeRect(target, root);
+        const count = outcomeCount(job.outcome);
+        const index = incomingIndex[job.outcome] ?? 0;
+        incomingIndex[job.outcome] = index + 1;
+        const slice = sliceHeight(t.h, index, count);
+
+        next.push({
+          key: `${job.id}-mid`,
+          jobId: job.id,
+          x0: s.x + s.w,
+          y0: s.y,
+          h0: s.h,
+          x1: m.x,
+          y1: m.y,
+          h1: m.h,
+        });
+        next.push({
+          key: `${job.id}-out`,
+          jobId: job.id,
+          x0: m.x + m.w,
+          y0: m.y,
+          h0: m.h,
+          x1: t.x,
+          y1: t.y + slice.yOffset,
+          h1: slice.height,
+        });
+      }
+
+      const width = Math.round(root.getBoundingClientRect().width);
+      const height = Math.round(root.getBoundingClientRect().height);
+      setSize((prev) => (prev.width === width && prev.height === height ? prev : { width, height }));
+      setRibbons((prev) => {
+        if (
+          prev.length === next.length &&
+          prev.every(
+            (ribbon, i) =>
+              ribbon.key === next[i]?.key &&
+              ribbon.x0 === next[i]?.x0 &&
+              ribbon.y0 === next[i]?.y0 &&
+              ribbon.h0 === next[i]?.h0 &&
+              ribbon.x1 === next[i]?.x1 &&
+              ribbon.y1 === next[i]?.y1 &&
+              ribbon.h1 === next[i]?.h1,
+          )
+        ) {
+          return prev;
+        }
+        return next;
+      });
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
+  const compact = size.width < 520;
+  const total = JOBS.length;
+  const hovering = hoverJob !== null || hoverOutcome !== null;
+  const litOutcome = hoverJob
+    ? (JOBS.find((job) => job.id === hoverJob)?.outcome ?? null)
+    : hoverOutcome;
+
+  function jobLit(jobId: string) {
+    if (!hovering) return null;
+    if (hoverJob) return jobId === hoverJob;
+    return JOBS.find((job) => job.id === jobId)?.outcome === hoverOutcome;
+  }
+
+  function cardTone(lit: boolean | null) {
+    if (lit === true) {
+      return "bg-[#f7f8fa]";
+    }
+    if (lit === false) return "opacity-40";
+    return "";
+  }
+
+  const ease = "transition-[background-color,opacity,filter] duration-300 ease-out delay-75";
+
+  return (
+    <div ref={rootRef} className="relative h-full min-h-[280px] w-full overflow-hidden">
+      <svg
+        className="pointer-events-none absolute inset-0 z-0"
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${size.width} ${size.height}`}
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        {[...ribbons]
+          .sort((a, b) => Number(jobLit(a.jobId) === true) - Number(jobLit(b.jobId) === true))
+          .map((ribbon) => {
+          const job = JOBS.find((item) => item.id === ribbon.jobId);
+          const lit = jobLit(ribbon.jobId);
+          const opacity = lit === true ? 0.48 : lit === false ? 0.05 : 0.17;
+          return (
+            <path
+              key={ribbon.key}
+              d={ribbonPath(ribbon.x0, ribbon.y0, ribbon.h0, ribbon.x1, ribbon.y1, ribbon.h1)}
+              fill={lit === true ? (job?.color ?? "#7B8B99") : "#7B8B99"}
+              fillOpacity={opacity}
+              style={{ transition: "fill-opacity 320ms ease-out 80ms, fill 320ms ease-out 80ms" }}
+            />
+          );
+        })}
+      </svg>
+
+      <div className="relative z-10 grid h-full min-h-0 grid-cols-[minmax(0,0.82fr)_minmax(140px,1.45fr)_minmax(0,0.82fr)] gap-2 md:gap-3">
+        <section className="flex min-h-0 min-w-0 flex-col">
+          <p className="shrink-0 text-[12px] font-medium md:text-[13px]">
+            <span className="tabular-nums">{total}</span> Saved
+          </p>
+          <p className="mb-2 shrink-0 text-[10px] text-[var(--muted)]">Roles in your board</p>
+          <div className="flex min-h-0 flex-1 flex-col justify-between gap-1.5">
+            {JOBS.map((job) => {
+              const lit = jobLit(job.id);
+              return (
+              <article
+                key={job.id}
+                className={`flex min-h-0 flex-1 cursor-pointer overflow-hidden rounded-[4px] border border-[var(--line)] bg-white ${ease} ${cardTone(lit)}`}
+                onMouseEnter={() => setHoverJob(job.id)}
+                onMouseLeave={() => setHoverJob(null)}
+              >
+                <div className="flex min-w-0 flex-1 flex-col justify-center px-2 py-1.5 md:px-2.5">
+                  <p className="truncate text-[11px] font-medium leading-tight md:text-xs">{job.title}</p>
+                  {compact ? (
+                    <p className="mt-0.5 text-[10px] text-[var(--muted)]">ATS {job.ats}</p>
+                  ) : (
+                    <>
+                      <div className="mt-1 flex items-baseline justify-between gap-2 text-[10px] text-[var(--muted)]">
+                        <span>ATS {job.ats}</span>
+                        <span className="tabular-nums">{job.share}%</span>
+                      </div>
+                      <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-[#e4e8ee]">
+                        <div
+                          className="h-full rounded-full"
+                          style={{ width: `${job.ats}%`, background: job.color }}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div
+                  ref={(el) => {
+                    sourceRefs.current[job.id] = el;
+                  }}
+                  className="w-2.5 shrink-0 md:w-3"
+                  style={{ background: job.color }}
+                />
+              </article>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="flex min-h-0 min-w-0 flex-col items-center">
+          <p className="shrink-0 text-center text-[12px] font-medium md:text-[13px]">
+            <span className="tabular-nums">{total}</span> Applied
+          </p>
+          <p className="mb-2 shrink-0 text-center text-[10px] text-[var(--muted)]">Moved forward</p>
+          <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+            <div className="flex h-[78%] w-2.5 flex-col gap-0.5 md:w-3">
+              {JOBS.map((job) => (
+                <div
+                  key={job.id}
+                  ref={(el) => {
+                    midRefs.current[job.id] = el;
+                  }}
+                  className={`min-h-0 flex-1 rounded-[1px] ${ease} ${
+                    jobLit(job.id) === false ? "opacity-25" : jobLit(job.id) === true ? "brightness-110" : ""
+                  }`}
+                  style={{ background: job.color }}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="flex min-h-0 min-w-0 flex-col">
+          <p className="shrink-0 text-[12px] font-medium md:text-[13px]">
+            <span className="tabular-nums">{total}</span> Results
+          </p>
+          <p className="mb-2 shrink-0 text-[10px] text-[var(--muted)]">Where they landed</p>
+          <div className="flex min-h-0 flex-1 flex-col justify-between gap-1.5">
+            {OUTCOMES.map((outcome) => {
+              const count = outcomeCount(outcome.id);
+              const lit = hovering ? litOutcome === outcome.id : null;
+              return (
+                <article
+                  key={outcome.id}
+                  className={`flex min-h-0 flex-1 cursor-pointer overflow-hidden rounded-[4px] border border-[var(--line)] bg-white ${ease} ${cardTone(lit)}`}
+                  onMouseEnter={() => setHoverOutcome(outcome.id)}
+                  onMouseLeave={() => setHoverOutcome(null)}
+                >
+                  <div
+                    ref={(el) => {
+                      targetRefs.current[outcome.id] = el;
+                    }}
+                    className="w-2.5 shrink-0 md:w-3"
+                    style={{ background: outcome.barColor ?? RESULT_BAR }}
+                  />
+                  <div className="flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1.5 md:px-2.5">
+                    <div className="min-w-0">
+                      <p className="truncate text-[11px] font-medium leading-tight md:text-xs">{outcome.title}</p>
+                      {outcome.badge && !compact ? (
+                        <span className="mt-1 inline-flex rounded-full bg-[#d9f7ff] px-1.5 py-0.5 text-[9px] font-medium text-[#0f6f86]">
+                          {outcome.badge}
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <p className="text-[11px] font-medium tabular-nums md:text-xs">{count}</p>
+                      <p className="text-[9px] text-[var(--muted)]">Roles</p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

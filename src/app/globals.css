@@ -6,7 +6,7 @@
   --mint: #20fc8f;
   --ink: #000000;
   --gold: #fdb833;
-  --paper: #f7f8fa;
+  --paper: #ffffff;
   --card: #ffffff;
   --muted: #5b6470;
   --line: #e4e8ee;
@@ -22,10 +22,65 @@ body {
   font-family: "Roboto", system-ui, sans-serif;
 }
 
+/* --- Page grid (classic Stripe blueprint) --- */
+
+.page-grid-root {
+  min-height: 100vh;
+  overflow-x: clip;
+  background: #fff;
+}
+
+.page-grid {
+  position: relative;
+  isolation: isolate;
+  max-width: 1120px;
+  min-height: 100vh;
+  margin: 0 auto;
+  border-inline: 1px solid var(--line);
+}
+
+.page-grid-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+.page-grid-content > *,
+.grid-band > * {
+  min-width: 0;
+}
+
+.grid-band {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+/* Full-viewport bottom rule for the sticky header */
+.header-rule::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  transform: translateX(-50%);
+  background: var(--line);
+  pointer-events: none;
+}
+
+/* Green (--gx/--gy) and amber (--ax/--ay) blob centers, 0–1, set by MeshHero. */
 .mesh-hero {
+  --gx: 0.12;
+  --gy: -0.1;
+  --ax: 0.9;
+  --ay: 0;
   background:
-    radial-gradient(900px 420px at 12% -10%, rgba(32, 252, 143, 0.35), transparent 58%),
-    radial-gradient(800px 380px at 90% 0%, rgba(253, 184, 51, 0.28), transparent 55%),
+    radial-gradient(900px 420px at calc(var(--gx) * 100%) calc(var(--gy) * 100%), rgba(32, 252, 143, 0.35), transparent 58%),
+    radial-gradient(800px 380px at calc(var(--ax) * 100%) calc(var(--ay) * 100%), rgba(253, 184, 51, 0.28), transparent 55%),
     #ffffff;
 }
 
@@ -37,57 +92,32 @@ body {
 }
 
 .card {
-  @apply rounded-[20px] bg-white shadow-[0_18px_50px_rgba(16,24,40,0.08)] border border-[var(--line)];
+  @apply rounded-[4px] border border-[var(--line)] bg-white;
 }
 
 .panel {
-  @apply rounded-[24px] border border-[var(--line)] bg-white;
-}
-
-.card-lift {
-  transition:
-    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.3s ease;
-}
-
-.card-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 60px rgba(16, 24, 40, 0.13);
-  border-color: rgba(32, 252, 143, 0.45);
+  @apply rounded-[4px] border border-[var(--line)] bg-white;
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-neutral-800;
+  @apply inline-flex items-center justify-center rounded-[50px] bg-black px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-800;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center rounded-full border border-black/15 bg-white px-5 py-2.5 text-sm font-medium text-black hover:bg-neutral-50;
+  @apply inline-flex items-center justify-center rounded-[50px] border border-black/15 bg-white px-4 py-2.5 text-sm font-medium text-black hover:bg-neutral-50;
 }
 
 .btn-primary,
 .btn-secondary {
-  transition:
-    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.btn-primary:hover,
-.btn-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(16, 24, 40, 0.16);
-}
-
-.btn-primary:active,
-.btn-secondary:active {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 0 4px 10px rgba(16, 24, 40, 0.12);
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .pill {
-  @apply inline-flex items-center rounded-full border border-black/10 bg-white/80 px-3 py-1 text-xs font-medium text-neutral-700 backdrop-blur;
+  @apply inline-flex items-center rounded-[4px] border border-[var(--line)] bg-white px-2.5 py-0.5 text-xs font-medium text-neutral-700;
+}
+
+.field {
+  @apply mt-1 w-full rounded-[4px] border border-[var(--line)] bg-white px-3 py-2 text-sm outline-none focus:border-black;
 }
 
 /* --- Motion --- */
@@ -103,7 +133,6 @@ body {
   }
 }
 
-/* Hero entrance: staggered fade-up on first paint */
 .hero-enter {
   animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -114,7 +143,6 @@ body {
 .hero-enter-4 { animation-delay: 0.35s; }
 .hero-enter-5 { animation-delay: 0.5s; }
 
-/* Scroll-triggered reveal (paired with the Reveal component) */
 .reveal {
   opacity: 0;
   transform: translateY(26px);
@@ -129,7 +157,6 @@ body {
   transform: translateY(0);
 }
 
-/* FAQ answer expand/collapse */
 .faq-answer {
   display: grid;
   grid-template-rows: 0fr;
@@ -152,17 +179,6 @@ body {
   transform: rotate(45deg);
 }
 
-/* Slow ambient pan for gradient accents */
-@keyframes gradient-pan {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.gradient-drift {
-  background-size: 200% 200%;
-  animation: gradient-pan 7s ease-in-out infinite;
-}
-
 @keyframes draw-ring {
   from {
     stroke-dashoffset: var(--ring-circ);
@@ -176,9 +192,22 @@ body {
   stroke-dashoffset: var(--ring-circ);
 }
 
-.hero-enter .ats-ring,
-.reveal.is-visible .ats-ring {
+.ats-scope.is-in-view .ats-ring {
   animation: draw-ring 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+.ats-row {
+  opacity: 0;
+  transform: translateX(-14px);
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(0.25s + var(--row-i, 0) * 90ms);
+}
+
+.ats-scope.is-in-view .ats-row {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .ats-radar {
@@ -187,8 +216,7 @@ body {
   transform: scale(0.86);
 }
 
-.hero-enter .ats-radar,
-.reveal.is-visible .ats-radar {
+.ats-scope.is-in-view .ats-radar {
   animation: radar-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
 }
 
@@ -199,22 +227,66 @@ body {
   }
 }
 
+.card-stack-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  pointer-events: none;
+  transition:
+    transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-stack-slot-0 {
+  transform: translate(0, 0);
+  opacity: 1;
+  z-index: 3;
+}
+
+.card-stack-slot-1 {
+  transform: translate(7px, 7px);
+  opacity: 1;
+  z-index: 2;
+}
+
+.card-stack-slot-2 {
+  transform: translate(14px, 14px);
+  opacity: 1;
+  z-index: 1;
+}
+
+.card-stack-exit-next {
+  transform: translate(0, 28px);
+  opacity: 0;
+  z-index: 4;
+}
+
+.card-stack-exit-prev {
+  transform: translate(0, -22px);
+  opacity: 0;
+  z-index: 4;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
   .hero-enter,
-  .gradient-drift,
-  .hero-enter .ats-ring,
-  .hero-enter .ats-radar,
-  .reveal.is-visible .ats-ring,
-  .reveal.is-visible .ats-radar {
+  .ats-scope.is-in-view .ats-ring,
+  .ats-scope.is-in-view .ats-radar {
     animation: none;
   }
 
   .ats-ring {
     stroke-dashoffset: var(--ring-offset);
+  }
+
+  .ats-row {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .ats-radar {
@@ -228,17 +300,11 @@ body {
     transition: none;
   }
 
-  .card-lift,
   .btn-primary,
   .btn-secondary,
   .faq-answer,
-  .faq-icon {
+  .faq-icon,
+  .card-stack-layer {
     transition: none;
-  }
-
-  .card-lift:hover,
-  .btn-primary:hover,
-  .btn-secondary:hover {
-    transform: none;
   }
 }

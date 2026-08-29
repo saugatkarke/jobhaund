@@ -1,4 +1,6 @@
-import type { CSSProperties } from "react";
+"use client";
+
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 export type AtsShape = "circle" | "square" | "diamond" | "triangle" | "oval" | "pennant";
 
@@ -74,13 +76,81 @@ function ShapeIcon({ shape, color }: { shape: AtsShape; color: string }) {
   );
 }
 
-function ScoreRing({ score }: { score: number }) {
+function useInView<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -48px 0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, inView };
+}
+
+function ScoreRing({
+  score,
+  compact,
+  active,
+}: {
+  score: number;
+  compact?: boolean;
+  active: boolean;
+}) {
   const r = 62;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - score / 100);
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!active) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplay(score);
+      return;
+    }
+
+    let raf = 0;
+    let start = 0;
+    const duration = 1150;
+    const delay = 150;
+
+    const tick = (now: number) => {
+      if (!start) start = now;
+      const t = Math.min(Math.max((now - start - delay) / duration, 0), 1);
+      const eased = 1 - Math.pow(1 - t, 4);
+      setDisplay(Math.round(eased * score));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active, score]);
+
   return (
-    <div className="flex flex-col items-center sm:items-start">
-      <svg viewBox="0 0 160 160" className="h-[132px] w-[132px] md:h-[148px] md:w-[148px]" aria-hidden="true">
+    <div className={compact ? "" : "flex flex-col items-center sm:items-start"}>
+      <svg
+        viewBox="0 0 160 160"
+        className={compact ? "h-[88px] w-[88px]" : "h-[132px] w-[132px] md:h-[148px] md:w-[148px]"}
+        aria-hidden="true"
+      >
         <circle cx="80" cy="80" r={r} fill="none" stroke="#eceff3" strokeWidth="11" />
         <circle
           className="ats-ring"
@@ -103,27 +173,18 @@ function ScoreRing({ score }: { score: number }) {
         />
         <text
           x="80"
-          y="76"
+          y="80"
           textAnchor="middle"
+          dominantBaseline="central"
           fill="#0b0f14"
           fontSize="38"
           fontWeight="700"
           fontFamily="Roboto, system-ui, sans-serif"
         >
-          {score}
-        </text>
-        <text
-          x="80"
-          y="100"
-          textAnchor="middle"
-          fill="#5b6470"
-          fontSize="12"
-          fontFamily="Roboto, system-ui, sans-serif"
-        >
-          ATS Score
+          {display}
         </text>
       </svg>
-      <p className="mt-0.5 text-xs text-[var(--muted)]">On-device Gemini</p>
+      {compact ? null : <p className="mt-0.5 text-xs text-[var(--muted)]">On-device Gemini</p>}
     </div>
   );
 }
@@ -187,23 +248,61 @@ function RadarChart({ dimensions }: { dimensions: AtsDimension[] }) {
 export function AtsScoreMock({
   score,
   dimensions,
+  compact = false,
 }: {
   score: number;
   dimensions: AtsDimension[];
+  compact?: boolean;
 }) {
+  const { ref, inView } = useInView<HTMLDivElement>();
+  const scopeClass = inView ? "ats-scope is-in-view" : "ats-scope";
+
+  const summary = (
+    <p className="sr-only">
+      ATS score {score} out of 100.
+      {dimensions.map((d) => ` ${d.label} ${d.score}.`).join("")}
+    </p>
+  );
+
+  if (compact) {
+    const rows = dimensions.slice(0, 4);
+    return (
+      <div ref={ref} className={scopeClass}>
+        {summary}
+        <div className="flex items-center gap-3">
+          <ScoreRing score={score} compact active={inView} />
+          <ul className="min-w-0 flex-1 space-y-1.5">
+            {rows.map((d, i) => (
+              <li
+                key={d.label}
+                className="ats-row flex items-center gap-2 text-xs"
+                style={{ "--row-i": i } as CSSProperties}
+              >
+                <ShapeIcon shape={d.shape} color={d.color} />
+                <span className="truncate">{d.label}</span>
+                <span className="ml-auto tabular-nums text-[var(--muted)]">{d.score}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <p className="sr-only">
-        ATS score {score} out of 100.
-        {dimensions.map((d) => ` ${d.label} ${d.score}.`).join("")}
-      </p>
+    <div ref={ref} className={scopeClass}>
+      {summary}
       <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(220px,280px)]">
         <div>
-          <ScoreRing score={score} />
+          <ScoreRing score={score} active={inView} />
           <h3 className="mt-5 text-sm font-medium">Overall score breakdown</h3>
           <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2.5">
-            {dimensions.map((d) => (
-              <li key={d.label} className="flex items-center gap-2 text-sm">
+            {dimensions.map((d, i) => (
+              <li
+                key={d.label}
+                className="ats-row flex items-center gap-2 text-sm"
+                style={{ "--row-i": i } as CSSProperties}
+              >
                 <ShapeIcon shape={d.shape} color={d.color} />
                 <span>{d.label}</span>
                 <span className="ml-auto tabular-nums text-[var(--muted)]">{d.score}</span>

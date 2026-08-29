@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { MarketingShell } from "@/components/MarketingShell";
+import { GridBand } from "@/components/PageGrid";
 import { getAuth } from "@/lib/auth";
 import { isAllowedRedirectUri } from "@/lib/crypto-hash";
 import { insertAuthCode } from "@/lib/extension-auth";
@@ -24,12 +26,16 @@ export default async function ExtensionConnectPage({
 
   if (method !== "S256" || !isAllowedRedirectUri(redirectUri) || !state || !codeChallenge) {
     return (
-      <main className="mx-auto max-w-lg px-5 py-24">
-        <h1 className="text-2xl font-bold">Invalid extension sign-in</h1>
-        <p className="mt-3 text-sm text-[var(--muted)]">
-          The redirect URI or PKCE challenge is not allowed.
-        </p>
-      </main>
+      <MarketingShell>
+        <GridBand as="main" className="border-b border-[var(--line)]">
+          <div className="col-span-12 px-5 py-16 md:col-span-8 md:col-start-3 md:px-6">
+            <h1 className="text-2xl font-bold tracking-tight">Invalid extension sign-in</h1>
+            <p className="mt-3 text-sm text-[var(--muted)]">
+              The redirect URI or PKCE challenge is not allowed.
+            </p>
+          </div>
+        </GridBand>
+      </MarketingShell>
     );
   }
 

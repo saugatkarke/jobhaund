@@ -24,7 +24,7 @@ const ITEMS = [
 export function FaqAccordion() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <div className="mx-auto max-w-2xl divide-y divide-black/10">
+    <div className="divide-y divide-[var(--line)] px-5 md:px-6">
       {ITEMS.map((item, index) => {
         const expanded = open === index;
         return (

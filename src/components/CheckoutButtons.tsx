@@ -76,8 +76,8 @@ export function CheckoutButtons({
       >
         {pending === yearlyPriceId ? "Starting…" : `Get Pro · ${yearlyLabel}`}
       </button>
-      <p className="text-center text-xs text-[var(--muted)]">{yearlySave}</p>
-      {error ? <p className="text-center text-sm text-red-600">{error}</p> : null}
+      <p className="text-xs text-[var(--muted)]">{yearlySave}</p>
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </div>
   );
 }
