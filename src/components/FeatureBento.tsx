@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { AtsScoreMock } from "./AtsScoreMock";
 import { CardStack } from "./CardStack";
-import { IconEyeOff, IconSaveTrackOrbit } from "./icons";
+import { IconEyeOff } from "./icons";
 import { JobFlowSankey } from "./JobFlowSankey";
 
 const ATS_DIMENSIONS = [
@@ -39,7 +39,6 @@ function ProPill() {
 function Tile({
   title,
   body,
-  titleIcon,
   pro,
   className = "",
   wellClassName = "h-full overflow-hidden rounded-[4px] bg-[#f4f6f8] p-3",
@@ -48,7 +47,6 @@ function Tile({
 }: {
   title: string;
   body: string;
-  titleIcon?: ReactNode;
   pro?: boolean;
   className?: string;
   wellClassName?: string;
@@ -61,14 +59,7 @@ function Tile({
     >
       <div className="px-5 pt-5">
         <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center gap-2">
-            {titleIcon ? (
-              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center text-black">
-                {titleIcon}
-              </span>
-            ) : null}
-            <h3 className="font-medium">{title}</h3>
-          </div>
+          <h3 className="font-medium">{title}</h3>
           {pro ? <ProPill /> : null}
         </div>
         <p className="mt-1 text-sm leading-relaxed text-[var(--muted)]">
@@ -171,7 +162,6 @@ export function FeatureBento() {
         className="min-h-[460px] md:col-span-8 md:row-span-2"
         wellClassName="h-full overflow-hidden"
         title="Save and track"
-        titleIcon={<IconSaveTrackOrbit className="h-5 w-5" />}
         body="Save a role and move it Saved → Applied → Interview. Stored in your browser, not our servers."
       >
         <JobFlowSankey />

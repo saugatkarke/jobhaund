@@ -75,8 +75,9 @@ function sliceHeight(total: number, index: number, count: number) {
 export function JobFlowSankey() {
   const rootRef = useRef<HTMLDivElement>(null);
   const sourceRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const midRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const targetRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const leftListRef = useRef<HTMLDivElement>(null);
+  const rightListRef = useRef<HTMLDivElement>(null);
   const [ribbons, setRibbons] = useState<Ribbon[]>([]);
   const [size, setSize] = useState({ width: 1, height: 1 });
   const [hoverJob, setHoverJob] = useState<string | null>(null);
@@ -92,12 +93,10 @@ export function JobFlowSankey() {
 
       for (const job of JOBS) {
         const source = sourceRefs.current[job.id];
-        const mid = midRefs.current[job.id];
         const target = targetRefs.current[job.outcome];
-        if (!source || !mid || !target) continue;
+        if (!source || !target) continue;
 
         const s = relativeRect(source, root);
-        const m = relativeRect(mid, root);
         const t = relativeRect(target, root);
         const count = outcomeCount(job.outcome);
         const index = incomingIndex[job.outcome] ?? 0;
@@ -105,21 +104,11 @@ export function JobFlowSankey() {
         const slice = sliceHeight(t.h, index, count);
 
         next.push({
-          key: `${job.id}-mid`,
+          key: job.id,
           jobId: job.id,
           x0: s.x + s.w,
           y0: s.y,
           h0: s.h,
-          x1: m.x,
-          y1: m.y,
-          h1: m.h,
-        });
-        next.push({
-          key: `${job.id}-out`,
-          jobId: job.id,
-          x0: m.x + m.w,
-          y0: m.y,
-          h0: m.h,
           x1: t.x,
           y1: t.y + slice.yOffset,
           h1: slice.height,
@@ -150,9 +139,15 @@ export function JobFlowSankey() {
     };
 
     measure();
+    const frame = requestAnimationFrame(measure);
     const observer = new ResizeObserver(measure);
     observer.observe(root);
-    return () => observer.disconnect();
+    if (leftListRef.current) observer.observe(leftListRef.current);
+    if (rightListRef.current) observer.observe(rightListRef.current);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, []);
 
   const compact = size.width < 520;
@@ -206,19 +201,26 @@ export function JobFlowSankey() {
         })}
       </svg>
 
-      <div className="relative z-10 grid h-full min-h-0 grid-cols-[minmax(0,0.82fr)_minmax(140px,1.45fr)_minmax(0,0.82fr)] gap-2 md:gap-3">
+      <div className="relative z-10 grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(120px,1.2fr)_minmax(0,1fr)] gap-2 md:gap-3">
         <section className="flex min-h-0 min-w-0 flex-col">
           <p className="shrink-0 text-[12px] font-medium md:text-[13px]">
             <span className="tabular-nums">{total}</span> Saved
           </p>
           <p className="mb-2 shrink-0 text-[10px] text-[var(--muted)]">Roles in your board</p>
-          <div className="flex min-h-0 flex-1 flex-col justify-between gap-1.5">
+          <div
+            ref={leftListRef}
+            className="grid min-h-0 flex-1 gap-1.5"
+            style={{ gridTemplateRows: `repeat(${JOBS.length}, minmax(0, 1fr))` }}
+          >
             {JOBS.map((job) => {
               const lit = jobLit(job.id);
               return (
               <article
                 key={job.id}
-                className={`flex min-h-0 flex-1 cursor-pointer overflow-hidden rounded-[4px] border border-[var(--line)] bg-white ${ease} ${cardTone(lit)}`}
+                ref={(el) => {
+                  sourceRefs.current[job.id] = el;
+                }}
+                className={`flex min-h-0 cursor-pointer overflow-hidden rounded-[4px] border border-[var(--line)] bg-white ${ease} ${cardTone(lit)}`}
                 onMouseEnter={() => setHoverJob(job.id)}
                 onMouseLeave={() => setHoverJob(null)}
               >
@@ -242,10 +244,7 @@ export function JobFlowSankey() {
                   )}
                 </div>
                 <div
-                  ref={(el) => {
-                    sourceRefs.current[job.id] = el;
-                  }}
-                  className="w-2.5 shrink-0 md:w-3"
+                  className="h-full w-2.5 shrink-0 self-stretch md:w-3"
                   style={{ background: job.color }}
                 />
               </article>
@@ -254,50 +253,33 @@ export function JobFlowSankey() {
           </div>
         </section>
 
-        <section className="flex min-h-0 min-w-0 flex-col items-center">
-          <p className="shrink-0 text-center text-[12px] font-medium md:text-[13px]">
-            <span className="tabular-nums">{total}</span> Applied
-          </p>
-          <p className="mb-2 shrink-0 text-center text-[10px] text-[var(--muted)]">Moved forward</p>
-          <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-            <div className="flex h-[78%] w-2.5 flex-col gap-0.5 md:w-3">
-              {JOBS.map((job) => (
-                <div
-                  key={job.id}
-                  ref={(el) => {
-                    midRefs.current[job.id] = el;
-                  }}
-                  className={`min-h-0 flex-1 rounded-[1px] ${ease} ${
-                    jobLit(job.id) === false ? "opacity-25" : jobLit(job.id) === true ? "brightness-110" : ""
-                  }`}
-                  style={{ background: job.color }}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
+        <div className="min-h-0 min-w-0" aria-hidden="true" />
 
         <section className="flex min-h-0 min-w-0 flex-col">
-          <p className="shrink-0 text-[12px] font-medium md:text-[13px]">
-            <span className="tabular-nums">{total}</span> Results
+          <p className="invisible shrink-0 text-[12px] font-medium md:text-[13px]">
+            <span className="tabular-nums">{total}</span> Saved
           </p>
-          <p className="mb-2 shrink-0 text-[10px] text-[var(--muted)]">Where they landed</p>
-          <div className="flex min-h-0 flex-1 flex-col justify-between gap-1.5">
+          <p className="invisible mb-2 shrink-0 text-[10px]">Roles in your board</p>
+          <div
+            ref={rightListRef}
+            className="grid min-h-0 flex-1 gap-1.5"
+            style={{ gridTemplateRows: `repeat(${JOBS.length}, minmax(0, 1fr))` }}
+          >
             {OUTCOMES.map((outcome) => {
               const count = outcomeCount(outcome.id);
               const lit = hovering ? litOutcome === outcome.id : null;
               return (
                 <article
                   key={outcome.id}
-                  className={`flex min-h-0 flex-1 cursor-pointer overflow-hidden rounded-[4px] border border-[var(--line)] bg-white ${ease} ${cardTone(lit)}`}
+                  ref={(el) => {
+                    targetRefs.current[outcome.id] = el;
+                  }}
+                  className={`flex min-h-0 cursor-pointer overflow-hidden rounded-[4px] border border-[var(--line)] bg-white ${ease} ${cardTone(lit)}`}
                   onMouseEnter={() => setHoverOutcome(outcome.id)}
                   onMouseLeave={() => setHoverOutcome(null)}
                 >
                   <div
-                    ref={(el) => {
-                      targetRefs.current[outcome.id] = el;
-                    }}
-                    className="w-2.5 shrink-0 md:w-3"
+                    className="h-full w-2.5 shrink-0 self-stretch md:w-3"
                     style={{ background: outcome.barColor ?? RESULT_BAR }}
                   />
                   <div className="flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1.5 md:px-2.5">
