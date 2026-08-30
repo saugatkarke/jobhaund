@@ -30,7 +30,7 @@ const ATS_DIMENSIONS = [
 
 function ProPill() {
   return (
-    <span className="rounded-[4px] bg-black px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.12em] text-[#20FC8F]">
+    <span className="inline-flex items-center rounded-[4px] border border-black/10 bg-[var(--mint)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
       Pro
     </span>
   );
@@ -84,7 +84,7 @@ function Chip({
   children: ReactNode;
 }) {
   const tones = {
-    date: "bg-black text-[#20FC8F]",
+    date: "border border-[var(--line)] bg-[#eef1f4] text-[var(--muted)]",
     interest: "bg-[#FDB833]/25 text-black",
     salary: "bg-[#20FC8F]/30 text-black",
     muted: "border border-[var(--line)] bg-white text-[var(--muted)]",
@@ -247,7 +247,7 @@ export function FeatureBento() {
       <Tile
         className="min-h-[220px] md:col-span-4"
         title="Date published"
-        body="Know if a role is two days old or two weeks old."
+        body="Know if a role is two days old, two weeks old, or months old."
         decorative={false}
       >
         <CardStack label="Example published dates">

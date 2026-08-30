@@ -3,14 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { FeatureBento } from "@/components/FeatureBento";
-import { IconDownload, IconShield, IconUser } from "@/components/icons";
+import { IconDownload, IconExternal, IconShield, IconUser } from "@/components/icons";
 import { MarketingShell } from "@/components/MarketingShell";
 import { MeshHero } from "@/components/MeshHero";
 import { GridBand } from "@/components/PageGrid";
 import { Reveal } from "@/components/Reveal";
-import { TRUST_LINE } from "@/lib/copy";
+import { SupportedMarkets } from "@/components/SupportedMarkets";
 
 const cwsUrl = process.env.NEXT_PUBLIC_CWS_URL || "/#features";
+const SEEK_CWS_URL =
+  "https://chromewebstore.google.com/detail/mpglbfbnhhnbbilpnihnjhcencoijiep";
+const INDEED_CWS_URL =
+  "https://chromewebstore.google.com/detail/lhkokphioeoagcpblnlidbehgpcbpgho";
 
 export default function HomePage() {
   return (
@@ -60,9 +64,9 @@ export default function HomePage() {
       </GridBand>
 
       <GridBand as="section" className="border-b border-[var(--line)]">
-        <p className="col-span-12 px-5 py-6 text-center text-sm text-[var(--muted)] md:px-6">
-          {TRUST_LINE}
-        </p>
+        <div className="trust-band col-span-12 flex justify-center px-5 py-5 md:px-6">
+          <SupportedMarkets />
+        </div>
       </GridBand>
 
       <GridBand as="section" className="border-b border-[var(--line)]">
@@ -74,6 +78,12 @@ export default function HomePage() {
             icon={<IconDownload className="h-5 w-5" />}
             title="1. Install free"
             body="Load the Indeed or Seek Chrome extension and keep tracking jobs locally."
+            actions={
+              <>
+                <StoreLink href={SEEK_CWS_URL} label="Seek" />
+                <StoreLink href={INDEED_CWS_URL} label="Indeed" />
+              </>
+            }
           />
         </Reveal>
         <Reveal delay={80} className="col-span-12 border-t border-[var(--line)] md:col-span-4 md:border-l">
@@ -81,13 +91,23 @@ export default function HomePage() {
             icon={<IconUser className="h-5 w-5" />}
             title="2. Sign in here"
             body="Create an email account. The popup Sign in connects the extension later."
+            actions={
+              <Link href="/signup" className="btn-secondary">
+                Sign Up
+              </Link>
+            }
           />
         </Reveal>
         <Reveal delay={160} className="col-span-12 border-t border-[var(--line)] md:col-span-4 md:border-l">
           <FeatureItem
             icon={<IconShield className="h-5 w-5" />}
-            title="3. Checkout in Paddle"
+            title="3. Choose your Plan"
             body="Monthly or yearly overlay checkout. We never store card numbers."
+            actions={
+              <Link href="/pricing" className="btn-primary">
+                Get Pro
+              </Link>
+            }
           />
         </Reveal>
       </GridBand>
@@ -129,18 +149,35 @@ function FeatureItem({
   icon,
   title,
   body,
+  actions,
 }: {
   icon: ReactNode;
   title: string;
   body: string;
+  actions?: ReactNode;
 }) {
   return (
     <div className="h-full px-5 py-10 md:px-6">
-      <div className="flex h-10 w-10 items-center justify-center rounded-[4px] bg-black text-[#20FC8F]">
-        {icon}
+      <div className="flex items-center gap-2.5">
+        <span className="flex shrink-0 text-[#20FC8F]">{icon}</span>
+        <h3 className="font-medium">{title}</h3>
       </div>
-      <h3 className="mt-5 font-medium">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">{body}</p>
+      {actions ? <div className="mt-5 flex flex-wrap gap-2">{actions}</div> : null}
     </div>
+  );
+}
+
+function StoreLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="btn-secondary gap-1.5 px-3 py-2 text-xs"
+    >
+      {label}
+      <IconExternal className="h-3.5 w-3.5" />
+    </a>
   );
 }

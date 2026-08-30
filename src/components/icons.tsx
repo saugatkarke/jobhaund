@@ -132,6 +132,26 @@ export function IconChevronDown({ className }: IconProps) {
   );
 }
 
+export function IconExternal({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path
+        d="M14 5h5v5M19 5l-8 8"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10 6H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function IconShield({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>

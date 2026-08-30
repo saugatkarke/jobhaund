@@ -15,7 +15,7 @@ type Outcome = {
   id: string;
   title: string;
   badge?: string;
-  barColor?: string;
+  barColor: string;
 };
 
 type Ribbon = {
@@ -38,13 +38,11 @@ const JOBS: Job[] = [
 ];
 
 const OUTCOMES: Outcome[] = [
-  { id: "interview", title: "Interview", badge: "In pipeline" },
-  { id: "offer", title: "Offer" },
-  { id: "noreply", title: "No reply" },
+  { id: "interview", title: "Interview", badge: "In pipeline", barColor: "#14B8A6" },
+  { id: "offer", title: "Offer", barColor: "#10B981" },
+  { id: "noreply", title: "No reply", barColor: "#38BDF8" },
   { id: "rejected", title: "Rejected", barColor: "#7F1D1D" },
 ];
-
-const RESULT_BAR = "#14B8A6";
 
 function outcomeCount(id: string) {
   return JOBS.filter((job) => job.outcome === id).length;
@@ -280,7 +278,7 @@ export function JobFlowSankey() {
                 >
                   <div
                     className="h-full w-2.5 shrink-0 self-stretch md:w-3"
-                    style={{ background: outcome.barColor ?? RESULT_BAR }}
+                    style={{ background: outcome.barColor }}
                   />
                   <div className="flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1.5 md:px-2.5">
                     <div className="min-w-0">
