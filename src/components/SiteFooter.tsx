@@ -61,7 +61,7 @@ export function SiteFooter() {
           </li>
         </ul>
       </div>
-      <p className="col-span-12 border-t border-[var(--line)] px-4 py-4 text-xs text-[var(--muted)]">
+      <p className="col-span-12 border-t border-[var(--line)] px-4 py-4 text-center text-xs text-[var(--muted)]">
         {DISCLAIMER}
       </p>
     </GridBand>

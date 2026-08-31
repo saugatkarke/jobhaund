@@ -3,7 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { FeatureBento } from "@/components/FeatureBento";
-import { IconDownload, IconExternal, IconShield, IconUser } from "@/components/icons";
+import {
+  IconDownload,
+  IconExternal,
+  IconShield,
+  IconUser,
+} from "@/components/icons";
 import { MarketingShell } from "@/components/MarketingShell";
 import { MeshHero } from "@/components/MeshHero";
 import { GridBand } from "@/components/PageGrid";
@@ -26,9 +31,9 @@ export default function HomePage() {
               Track Indeed and Seek jobs locally. Unlock Hide and ATS with Pro.
             </h1>
             <p className="hero-enter hero-enter-3 mx-auto mt-5 max-w-xl text-[var(--muted)]">
-              One Pro plan covers both Indeed and Seek. Metrics, Copy JD, Save, and
-              a local Kanban stay free. Pay here with Paddle when you want Hide /
-              Unhide and ATS score results.
+              One Pro plan covers both Indeed and Seek. Metrics, Copy JD, Save,
+              and a local Kanban stay free. Pay here with Paddle when you want
+              Hide / Unhide and ATS score results.
             </p>
             <div className="hero-enter hero-enter-4 mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/pricing" className="btn-primary">
@@ -49,7 +54,11 @@ export default function HomePage() {
         </MeshHero>
       </GridBand>
 
-      <GridBand as="section" id="features" className="border-b border-[var(--line)]">
+      <GridBand
+        as="section"
+        id="features"
+        className="border-b border-[var(--line)]"
+      >
         <Reveal className="col-span-12 px-5 pt-10 md:px-6 md:pt-12">
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
             Features
@@ -58,7 +67,10 @@ export default function HomePage() {
             See the listing. Track the search.
           </h2>
         </Reveal>
-        <Reveal delay={80} className="col-span-12 px-5 pb-12 pt-8 md:px-6 md:pb-16">
+        <Reveal
+          delay={80}
+          className="col-span-12 px-5 pb-12 pt-8 md:px-6 md:pb-16"
+        >
           <FeatureBento />
         </Reveal>
       </GridBand>
@@ -73,7 +85,10 @@ export default function HomePage() {
         <Reveal className="col-span-12 px-5 py-10 md:px-6 md:py-12">
           <h2 className="text-3xl font-bold tracking-tight">How it works</h2>
         </Reveal>
-        <Reveal delay={0} className="col-span-12 border-t border-[var(--line)] md:col-span-4">
+        <Reveal
+          delay={0}
+          className="col-span-12 border-t border-[var(--line)] md:col-span-4"
+        >
           <FeatureItem
             icon={<IconDownload className="h-5 w-5" />}
             title="1. Install free"
@@ -86,7 +101,10 @@ export default function HomePage() {
             }
           />
         </Reveal>
-        <Reveal delay={80} className="col-span-12 border-t border-[var(--line)] md:col-span-4 md:border-l">
+        <Reveal
+          delay={80}
+          className="col-span-12 border-t border-[var(--line)] md:col-span-4 md:border-l"
+        >
           <FeatureItem
             icon={<IconUser className="h-5 w-5" />}
             title="2. Sign in here"
@@ -98,7 +116,10 @@ export default function HomePage() {
             }
           />
         </Reveal>
-        <Reveal delay={160} className="col-span-12 border-t border-[var(--line)] md:col-span-4 md:border-l">
+        <Reveal
+          delay={160}
+          className="col-span-12 border-t border-[var(--line)] md:col-span-4 md:border-l"
+        >
           <FeatureItem
             icon={<IconShield className="h-5 w-5" />}
             title="3. Choose your Plan"
@@ -118,18 +139,27 @@ export default function HomePage() {
             Everything you need to know before you start
           </h2>
         </Reveal>
-        <Reveal delay={80} className="col-span-12 border-t border-[var(--line)] md:col-span-8 md:border-l md:border-t-0">
+        <Reveal
+          delay={80}
+          className="col-span-12 border-t border-[var(--line)] md:col-span-8 md:border-l md:border-t-0"
+        >
           <FaqAccordion />
         </Reveal>
       </GridBand>
 
-      <GridBand as="section" className="mesh-cta border-b border-[var(--line)] text-white">
+      <GridBand
+        as="section"
+        className="mesh-cta border-b border-[var(--line)] text-white"
+      >
         <div className="col-span-12 px-5 py-14 md:col-span-8 md:px-6 md:py-16">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Start hiding jobs and scoring ATS on Indeed and Seek
+            Apply for your dream job with clarity
           </h2>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/pricing" className="btn-primary bg-white text-black hover:bg-neutral-100">
+            <Link
+              href="/pricing"
+              className="btn-primary bg-white text-black hover:bg-neutral-100"
+            >
               Get Pro
             </Link>
             <Link
@@ -163,7 +193,9 @@ function FeatureItem({
         <h3 className="font-medium">{title}</h3>
       </div>
       <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">{body}</p>
-      {actions ? <div className="mt-5 flex flex-wrap gap-2">{actions}</div> : null}
+      {actions ? (
+        <div className="mt-5 flex flex-wrap gap-2">{actions}</div>
+      ) : null}
     </div>
   );
 }
