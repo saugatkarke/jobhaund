@@ -1,6 +1,16 @@
 import Link from "next/link";
 import { GridBand } from "./PageGrid";
+import { IconStar } from "./icons";
 import { Logo } from "./Logo";
+
+function HeaderRating() {
+  return (
+    <span className="header-rating" aria-label="5 star rating">
+      <IconStar gradient className="h-3.5 w-3.5 shrink-0" />
+      <span className="header-rating-label">5 star rating</span>
+    </span>
+  );
+}
 
 export function SiteHeader() {
   return (
@@ -23,7 +33,8 @@ export function SiteHeader() {
           Privacy
         </Link>
       </nav>
-      <div className="col-span-8 flex h-14 items-center justify-end gap-3 px-3 text-sm md:col-span-3 md:gap-4 md:px-4">
+      <div className="col-span-8 flex h-14 items-center justify-end gap-2 px-3 text-sm md:col-span-3 md:gap-3 md:px-4">
+        <HeaderRating />
         <Link href="/login" className="text-neutral-700 transition-colors duration-200 hover:text-black">
           Login
         </Link>

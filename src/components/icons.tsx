@@ -152,6 +152,38 @@ export function IconExternal({ className }: IconProps) {
   );
 }
 
+export function IconStar({
+  className,
+  gradient,
+}: IconProps & { gradient?: boolean }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill={gradient ? "url(#theme-star-gradient)" : "currentColor"}
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      {gradient ? (
+        <defs>
+          <linearGradient
+            id="theme-star-gradient"
+            x1="4"
+            y1="2"
+            x2="20"
+            y2="22"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="var(--mint)" />
+            <stop offset="100%" stopColor="var(--gold)" />
+          </linearGradient>
+        </defs>
+      ) : null}
+      <path d="M12 2.5 14.6 8.4l6.4.9-4.7 4.5 1.1 6.4L12 17.3 6.6 20.2l1.1-6.4-4.7-4.5 6.4-.9L12 2.5Z" />
+    </svg>
+  );
+}
+
 export function IconShield({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>
