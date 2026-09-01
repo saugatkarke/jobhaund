@@ -27,7 +27,15 @@ export function IconMetrics({ className }: IconProps) {
 export function IconCopy({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>
-      <rect x="8" y="8" width="12" height="13" rx="2.5" stroke="currentColor" strokeWidth="1.75" />
+      <rect
+        x="8"
+        y="8"
+        width="12"
+        height="13"
+        rx="2.5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+      />
       <path
         d="M16 8V5.5A2.5 2.5 0 0 0 13.5 3h-7A2.5 2.5 0 0 0 4 5.5v10A2.5 2.5 0 0 0 6.5 18H8"
         stroke="currentColor"
@@ -41,9 +49,33 @@ export function IconCopy({ className }: IconProps) {
 export function IconKanban({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>
-      <rect x="3" y="4" width="5.5" height="16" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
-      <rect x="9.25" y="4" width="5.5" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
-      <rect x="15.5" y="4" width="5.5" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
+      <rect
+        x="3"
+        y="4"
+        width="5.5"
+        height="16"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+      />
+      <rect
+        x="9.25"
+        y="4"
+        width="5.5"
+        height="10"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+      />
+      <rect
+        x="15.5"
+        y="4"
+        width="5.5"
+        height="13"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+      />
     </svg>
   );
 }
@@ -71,7 +103,13 @@ export function IconScan({ className }: IconProps) {
         strokeWidth="1.75"
         strokeLinecap="round"
       />
-      <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.75" />
+      <circle
+        cx="12"
+        cy="12"
+        r="3.2"
+        stroke="currentColor"
+        strokeWidth="1.75"
+      />
     </svg>
   );
 }
@@ -155,19 +193,20 @@ export function IconExternal({ className }: IconProps) {
 export function IconStar({
   className,
   gradient,
-}: IconProps & { gradient?: boolean }) {
+  gradientId = "theme-star-gradient",
+}: IconProps & { gradient?: boolean; gradientId?: string }) {
   return (
     <svg
       className={className}
       viewBox="0 0 24 24"
-      fill={gradient ? "url(#theme-star-gradient)" : "currentColor"}
+      fill={gradient ? `url(#${gradientId})` : "currentColor"}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
       {gradient ? (
         <defs>
           <linearGradient
-            id="theme-star-gradient"
+            id={gradientId}
             x1="4"
             y1="2"
             x2="20"
@@ -183,7 +222,6 @@ export function IconStar({
     </svg>
   );
 }
-
 
 export function IconCheckCircle({ className }: IconProps) {
   return (
