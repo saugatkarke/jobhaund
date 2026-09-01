@@ -184,7 +184,6 @@ function ScoreRing({
           {display}
         </text>
       </svg>
-      {compact ? null : <p className="mt-0.5 text-xs text-[var(--muted)]">On-device Gemini</p>}
     </div>
   );
 }

@@ -180,7 +180,7 @@ export function FeatureBento() {
         className="min-h-[220px] md:col-span-4"
         pro
         title="ATS scoring"
-        body="Score a locally stored resume against the JD. On-device Gemini."
+        body="Score a stored resume against the job description."
       >
         <div className="rounded-[4px] border border-[var(--line)] bg-white p-3">
           <AtsScoreMock compact score={72} dimensions={ATS_DIMENSIONS} />
@@ -199,9 +199,6 @@ export function FeatureBento() {
             meta="Seek · Melbourne"
             chips={
               <>
-                <span className="text-[11px] text-[var(--muted)] line-through">
-                  Salary not listed
-                </span>
                 <Chip tone="salary">$128k–$145k</Chip>
               </>
             }
