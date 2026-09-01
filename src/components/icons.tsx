@@ -184,6 +184,28 @@ export function IconStar({
   );
 }
 
+
+export function IconCheckCircle({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <circle
+        cx="12"
+        cy="12"
+        r="8.25"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M8.4 12.15 11 14.7l4.6-5.3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function IconShield({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>

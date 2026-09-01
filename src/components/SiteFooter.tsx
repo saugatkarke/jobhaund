@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { DISCLAIMER } from "@/lib/copy";
+import { FooterWhackAMole } from "./FooterWhackAMole";
 import { GridBand } from "./PageGrid";
 import { Logo } from "./Logo";
 
 export function SiteFooter() {
   return (
     <GridBand as="footer" className="footer-dots border-t border-[var(--line)]">
+      <FooterWhackAMole />
       <div className="col-span-12 px-4 py-10 md:col-span-3">
         <div className="flex items-center gap-2 text-sm font-medium">
           <Logo className="h-7 w-7" />
