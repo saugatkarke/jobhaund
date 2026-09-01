@@ -17,6 +17,17 @@ export function isProPriceId(priceId: string): boolean {
   return Boolean(id) && (id === monthlyPriceId() || id === yearlyPriceId());
 }
 
+export function formatPrice(amount: number): string {
+  if (Number.isInteger(amount)) return `$${amount}`;
+  return `$${amount.toFixed(2)}`;
+}
+
+export function yearlyDiscountPercent(): number {
+  const full = MONTHLY_AMOUNT * 12;
+  if (full <= 0) return 0;
+  return Math.round((1 - YEARLY_AMOUNT / full) * 100);
+}
+
 export function yearlySavingsLabel(): string {
   const full = MONTHLY_AMOUNT * 12;
   const saved = Math.round(full - YEARLY_AMOUNT);
