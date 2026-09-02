@@ -158,7 +158,7 @@ export default function HomePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/pricing"
-              className="btn-primary bg-white text-black hover:bg-neutral-100"
+              className="btn-primary"
             >
               Get Pro
             </Link>

@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+} from "react";
 import { IconCheckCircle } from "./icons";
 import { startPaddleCheckout } from "@/lib/paddle-checkout";
 import {
@@ -9,6 +15,152 @@ import {
   formatPrice,
   yearlyDiscountPercent,
 } from "@/lib/pricing";
+
+const SLOT_CYCLES = 1;
+const SLOT_DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const SLOT_SESSION_KEY = "jh_price_slot";
+
+function clearLegacySlotCache() {
+  try {
+    localStorage.removeItem(SLOT_SESSION_KEY);
+  } catch {
+    // ignore
+  }
+  try {
+    document.cookie = `${SLOT_SESSION_KEY}=; Max-Age=0; Path=/; SameSite=Lax`;
+  } catch {
+    // ignore
+  }
+}
+
+function hasPlayedSlot(id: string): boolean {
+  try {
+    return sessionStorage.getItem(`${SLOT_SESSION_KEY}:${id}`) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markSlotPlayed(id: string) {
+  try {
+    sessionStorage.setItem(`${SLOT_SESSION_KEY}:${id}`, "1");
+  } catch {
+    // Private mode / blocked storage — skip persistence.
+  }
+}
+
+function SlotPrice({ value, slotId }: { value: string; slotId: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [armed, setArmed] = useState(false);
+  const [spin, setSpin] = useState(false);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    clearLegacySlotCache();
+
+    const persistSlot = slotId !== "yearly";
+    const skipMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      (persistSlot && hasPlayedSlot(slotId));
+
+    if (skipMotion) {
+      setArmed(false);
+      setSpin(false);
+      return;
+    }
+
+    setArmed(true);
+    setSpin(false);
+
+    function play() {
+      setSpin(true);
+      if (persistSlot) markSlotPlayed(slotId);
+    }
+
+    const rect = el.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    if (rect.top < vh * 0.92 && rect.bottom > vh * 0.08) {
+      play();
+      return;
+    }
+
+    if (typeof IntersectionObserver === "undefined") {
+      play();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          play();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -40px 0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [slotId]);
+
+  const className = [
+    "price-slot",
+    armed ? "is-armed" : "",
+    spin ? "is-spinning" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span ref={ref} className={className}>
+      <span className="sr-only">{value}</span>
+      <span className="price-slot-visual" aria-hidden="true">
+        {Array.from(value, (char, index) => {
+          const isDigit = char >= "0" && char <= "9";
+          const slotTo = isDigit
+            ? 1 + SLOT_CYCLES * 10 + Number(char)
+            : 1;
+
+          return (
+            <span
+              key={`${value}-${index}`}
+              className={
+                isDigit
+                  ? "price-slot-reel"
+                  : "price-slot-reel price-slot-reel-static"
+              }
+              style={
+                {
+                  "--slot-to": slotTo,
+                  "--slot-delay": `${index * 49}ms`,
+                } as CSSProperties
+              }
+            >
+              <span className="price-slot-strip">
+                <span className="price-slot-digit" />
+                {isDigit
+                  ? Array.from({ length: SLOT_CYCLES + 1 }, (_, cycle) =>
+                      SLOT_DIGITS.map((n) => (
+                        <span
+                          key={`${cycle}-${n}`}
+                          className="price-slot-digit"
+                        >
+                          {n}
+                        </span>
+                      ))
+                    )
+                  : (
+                    <span className="price-slot-digit">{char}</span>
+                  )}
+              </span>
+            </span>
+          );
+        })}
+      </span>
+    </span>
+  );
+}
 
 type Interval = "monthly" | "yearly";
 
@@ -110,6 +262,7 @@ export function PricingCards({
               <span>$0</span>
               <span className="pricing-card-period">/forever</span>
             </p>
+            <div className="pricing-card-rule" aria-hidden="true" />
             <p className="pricing-card-tagline">
               Track Indeed and Seek without paying. Metrics, save, and a local
               board.
@@ -141,9 +294,10 @@ export function PricingCards({
               <span className="pricing-card-badge">Popular</span>
             </div>
             <p className="pricing-card-price tabular-nums">
-              <span>{proPrice}</span>
+              <SlotPrice key={interval} value={proPrice} slotId={interval} />
               <span className="pricing-card-period">/{proPeriod}</span>
             </p>
+            <div className="pricing-card-rule" aria-hidden="true" />
             <p className="pricing-card-tagline">
               Best for people who want to hide listings and score a resume
               against the JD.

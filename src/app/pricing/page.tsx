@@ -14,12 +14,9 @@ export default function PricingPage() {
             Pricing
           </p>
           <h1 className="mt-2 text-4xl font-bold tracking-tight">
-            Free to track Indeed and Seek. Pro to hide and score.
+            Hide jobs you don't want.
+            <br /> Score the ones you do.
           </h1>
-          <p className="mt-4 max-w-xl text-sm text-[var(--muted)]">
-            One Pro subscription unlocks Hide / Unhide and ATS results on both
-            platforms.
-          </p>
         </div>
       </GridBand>
       <GridBand as="section" className="border-b border-[var(--line)]">

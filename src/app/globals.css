@@ -91,6 +91,7 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  opacity: 0.85;
   background-image: radial-gradient(
     circle,
     var(--dot-fill) 2.4px,
@@ -110,6 +111,11 @@ body {
     rgba(0, 0, 0, 0.35) 42%,
     #000 100%
   );
+  transition: opacity 0.28s ease;
+}
+
+.footer-dots:hover::before {
+  opacity: 1;
 }
 
 .footer-dots > *:not(.footer-mole-layer) {
@@ -1187,7 +1193,7 @@ body {
 
 .pricing-card-price {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   gap: 6px;
   margin-top: 22px;
 }
@@ -1199,10 +1205,83 @@ body {
   line-height: 1;
 }
 
+.price-slot {
+  position: relative;
+  display: inline-flex;
+  height: 1em;
+  overflow: hidden;
+}
+
+.price-slot-visual {
+  display: flex;
+  align-items: flex-start;
+  height: 1em;
+}
+
+.price-slot-reel {
+  display: block;
+  flex: none;
+  width: 0.62em;
+  height: 1em;
+  overflow: hidden;
+}
+
+.price-slot-reel-static {
+  width: auto;
+  min-width: 0.36em;
+}
+
+.price-slot-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(calc(var(--slot-to) * -1em));
+  will-change: transform;
+}
+
+.price-slot.is-armed:not(.is-spinning) .price-slot-strip {
+  transform: translateY(0);
+}
+
+.price-slot-digit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1em;
+  line-height: 1;
+}
+
+.price-slot.is-spinning .price-slot-strip {
+  animation: price-slot-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--slot-delay, 0s);
+}
+
+.price-slot.is-spinning .price-slot-reel-static .price-slot-strip {
+  animation-duration: 0.39s;
+}
+
+@keyframes price-slot-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(var(--slot-to) * -1em));
+  }
+}
+
 .pricing-card-period {
   font-size: 14px;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.5);
+  padding-bottom: 6px;
+}
+
+.pricing-card-rule {
+  align-self: stretch;
+  width: calc(100% + 40px);
+  height: 0;
+  margin: 16px -20px 0;
+  border-top: 1px solid var(--line);
 }
 
 .pricing-card-tagline {
@@ -1220,7 +1299,7 @@ body {
   justify-content: center;
   width: 100%;
   height: 44px;
-  margin-top: 0;
+  margin-top: 14px;
   padding: 0 20px;
   border: 0;
   border-radius: 999px;
@@ -1327,11 +1406,17 @@ body {
   .trust-band,
   .trust-chip,
   .footer-dots,
+  .footer-dots::before,
   .footer-mole-hole,
   .footer-mole-sprite,
   .pricing-toggle-option,
   .pricing-card-cta {
     transition: none;
+  }
+
+  .price-slot.is-spinning .price-slot-strip {
+    animation: none;
+    transform: translateY(calc(var(--slot-to) * -1em));
   }
 
   .trust-band {
