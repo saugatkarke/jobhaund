@@ -6,8 +6,8 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
   return (
     <PageGrid>
       <SiteHeader />
-      <div className="grid-band min-h-0">
-        <div className="col-span-12 grid grid-cols-12">
+      <div className="grid-band min-h-0 h-full">
+        <div className="col-span-12 grid h-full grid-cols-12">
           {children}
         </div>
       </div>
