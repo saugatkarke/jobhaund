@@ -283,24 +283,173 @@ body {
   pointer-events: none;
 }
 
-/* Green (--gx/--gy) and amber (--ax/--ay) blob centers, 0–1, set by MeshHero. */
+/* Green (--gx/--gy) and amber (--ax/--ay) blob centers, 0–1, set by MeshHero.
+   Wave offsets (--wx/--wy, --w2x/--w2y) and blob colors (--gc/--ac/--mc)
+   animate so the field rolls like a wave within mint ↔ gold. */
+@property --wx {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --wy {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --w2x {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --w2y {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --w3x {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --w3y {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --gc {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(32, 252, 143, 0.38);
+}
+
+@property --ac {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(253, 184, 51, 0.3);
+}
+
+@property --mc {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(140, 230, 110, 0.22);
+}
+
 .mesh-hero {
   --gx: 0.12;
   --gy: -0.1;
   --ax: 0.9;
   --ay: 0;
+  --wx: 0;
+  --wy: 0;
+  --w2x: 0;
+  --w2y: 0;
+  --w3x: 0;
+  --w3y: 0;
+  --gc: rgba(32, 252, 143, 0.38);
+  --ac: rgba(253, 184, 51, 0.3);
+  --mc: rgba(140, 230, 110, 0.22);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #ffffff;
+  animation: mesh-wave 18s ease-in-out infinite;
+}
+
+.mesh-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background:
     radial-gradient(
-      900px 420px at calc(var(--gx) * 100%) calc(var(--gy) * 100%),
-      rgba(32, 252, 143, 0.35),
+      920px 460px at calc((var(--gx) + var(--wx)) * 100%)
+        calc((var(--gy) + var(--wy)) * 100%),
+      var(--gc),
       transparent 58%
     ),
     radial-gradient(
-      800px 380px at calc(var(--ax) * 100%) calc(var(--ay) * 100%),
-      rgba(253, 184, 51, 0.28),
+      820px 400px at calc((var(--ax) + var(--w2x)) * 100%)
+        calc((var(--ay) + var(--w2y)) * 100%),
+      var(--ac),
       transparent 55%
     ),
-    #ffffff;
+    radial-gradient(
+      680px 320px at calc((0.48 + var(--w3x)) * 100%)
+        calc((0.78 + var(--w3y)) * 100%),
+      var(--mc),
+      transparent 62%
+    );
+}
+
+.mesh-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes mesh-wave {
+  0%,
+  100% {
+    --wx: 0;
+    --wy: 0;
+    --w2x: 0;
+    --w2y: 0;
+    --w3x: 0;
+    --w3y: 0;
+    --gc: rgba(32, 252, 143, 0.38);
+    --ac: rgba(253, 184, 51, 0.3);
+    --mc: rgba(140, 230, 110, 0.2);
+  }
+  20% {
+    --wx: 0.2;
+    --wy: 0.32;
+    --w2x: -0.24;
+    --w2y: 0.18;
+    --w3x: 0.22;
+    --w3y: -0.16;
+    --gc: rgba(90, 242, 130, 0.4);
+    --ac: rgba(253, 200, 70, 0.34);
+    --mc: rgba(32, 252, 143, 0.24);
+  }
+  40% {
+    --wx: 0.34;
+    --wy: 0.08;
+    --w2x: -0.08;
+    --w2y: 0.46;
+    --w3x: -0.18;
+    --w3y: -0.28;
+    --gc: rgba(180, 220, 80, 0.34);
+    --ac: rgba(32, 252, 143, 0.32);
+    --mc: rgba(253, 184, 51, 0.26);
+  }
+  60% {
+    --wx: 0.06;
+    --wy: 0.48;
+    --w2x: -0.36;
+    --w2y: 0.12;
+    --w3x: 0.28;
+    --w3y: 0.06;
+    --gc: rgba(253, 184, 51, 0.32);
+    --ac: rgba(70, 236, 150, 0.34);
+    --mc: rgba(200, 210, 70, 0.22);
+  }
+  80% {
+    --wx: -0.1;
+    --wy: 0.2;
+    --w2x: 0.08;
+    --w2y: 0.38;
+    --w3x: -0.12;
+    --w3y: -0.1;
+    --gc: rgba(60, 246, 160, 0.36);
+    --ac: rgba(253, 184, 51, 0.36);
+    --mc: rgba(32, 252, 143, 0.18);
+  }
 }
 
 .mesh-cta {
@@ -1373,7 +1522,8 @@ body {
   .hero-enter,
   .ats-scope.is-in-view .ats-ring,
   .ats-scope.is-in-view .ats-radar,
-  .footer-strike {
+  .footer-strike,
+  .mesh-hero {
     animation: none;
   }
 

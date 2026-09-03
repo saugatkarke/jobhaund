@@ -3,13 +3,23 @@
 import Link from "next/link";
 import { FormEvent, useState, type ReactNode } from "react";
 import { authClient } from "@/lib/auth-client";
+import { IconKey, IconUser, IconUserPlus } from "@/components/icons";
 
-function AuthLink({ href, children }: { href: string; children: ReactNode }) {
+function AuthLink({
+  href,
+  icon,
+  children,
+}: {
+  href: string;
+  icon: ReactNode;
+  children: ReactNode;
+}) {
   return (
     <Link
       href={href}
-      className="transition-colors duration-200 hover:text-black"
+      className="inline-flex items-center gap-1.5 transition-colors duration-200 hover:text-black"
     >
+      {icon}
       {children}
     </Link>
   );
@@ -117,10 +127,13 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
       </button>
       {error ? <AuthError message={error} /> : null}
       {notice ? <AuthNotice message={notice} /> : null}
-      <p className="border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
-        <AuthLink href="/signup">Create an account</AuthLink>
-        {" · "}
-        <AuthLink href="/forgot-password">Forgot password</AuthLink>
+      <p className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
+        <AuthLink href="/signup" icon={<IconUserPlus className="h-3.5 w-3.5" />}>
+          Create an account
+        </AuthLink>
+        <AuthLink href="/forgot-password" icon={<IconKey className="h-3.5 w-3.5" />}>
+          Forgot password
+        </AuthLink>
       </p>
     </div>
   );
@@ -160,8 +173,11 @@ export function SignupForm() {
         Create account
       </button>
       {error ? <AuthError message={error} /> : null}
-      <p className="border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
-        Already have an account? <AuthLink href="/login">Sign in</AuthLink>
+      <p className="flex flex-wrap items-center gap-x-1.5 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
+        Already have an account?
+        <AuthLink href="/login" icon={<IconUser className="h-3.5 w-3.5" />}>
+          Sign in
+        </AuthLink>
       </p>
     </form>
   );
@@ -201,7 +217,9 @@ export function ForgotForm() {
       {error ? <AuthError message={error} /> : null}
       {notice ? <AuthNotice message={notice} /> : null}
       <p className="border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
-        <AuthLink href="/login">Back to sign in</AuthLink>
+        <AuthLink href="/login" icon={<IconUser className="h-3.5 w-3.5" />}>
+          Back to sign in
+        </AuthLink>
       </p>
     </form>
   );

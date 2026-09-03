@@ -142,6 +142,41 @@ export function IconUser({ className }: IconProps) {
   );
 }
 
+export function IconUserPlus({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <circle cx="9" cy="8" r="3.2" stroke="currentColor" strokeWidth="1.75" />
+      <path
+        d="M3.2 19a5.8 5.8 0 0 1 11.6 0"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+      <path
+        d="M17 10v6M14 13h6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function IconKey({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <circle cx="8" cy="12" r="3.4" stroke="currentColor" strokeWidth="1.75" />
+      <path
+        d="M11.4 12H20M16.6 12v2.6M19 12v2.6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function IconChevronUp({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>
