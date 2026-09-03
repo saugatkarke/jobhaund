@@ -29,8 +29,8 @@ export default async function ExtensionConnectPage({
       <MarketingShell>
         <GridBand as="main" className="border-b border-[var(--line)]">
           <div className="col-span-12 px-5 py-16 md:col-span-8 md:col-start-3 md:px-6">
-            <h1 className="text-2xl font-bold tracking-tight">Invalid extension sign-in</h1>
-            <p className="mt-3 text-sm text-[var(--muted)]">
+            <h1 className="hero-enter hero-enter-2 text-2xl font-bold tracking-tight">Invalid extension sign-in</h1>
+            <p className="hero-enter hero-enter-3 mt-3 text-sm text-[var(--muted)]">
               The redirect URI or PKCE challenge is not allowed.
             </p>
           </div>

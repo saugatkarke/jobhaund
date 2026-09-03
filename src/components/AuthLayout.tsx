@@ -21,15 +21,17 @@ export function AuthLayout({
       className="border-b border-[var(--line)] md:h-full"
     >
       <div className="mesh-hero col-span-12 flex flex-col justify-center px-5 py-14 md:col-span-6 md:px-8 md:py-16">
-        <p className="text-xs font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
+        <p className="hero-enter hero-enter-1 text-xs font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
           {eyebrow}
         </p>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-5xl">
+        <h1 className="hero-enter hero-enter-2 mt-2 text-4xl font-bold tracking-tight md:text-5xl">
           {title}
         </h1>
-        <p className="mt-4 max-w-md text-[var(--muted)]">{description}</p>
+        <p className="hero-enter hero-enter-3 mt-4 max-w-md text-[var(--muted)]">
+          {description}
+        </p>
         {notes?.length ? (
-          <ul className="mt-8 max-w-md space-y-3">
+          <ul className="hero-enter hero-enter-4 mt-8 max-w-md space-y-3">
             {notes.map((note) => (
               <li key={note} className="flex items-start gap-2.5 text-sm">
                 <IconCheckCircle className="mt-0.5 h-[18px] w-[18px] shrink-0 text-[var(--mint)]" />
@@ -39,7 +41,7 @@ export function AuthLayout({
           </ul>
         ) : null}
       </div>
-      <div className="col-span-12 flex flex-col justify-center border-t border-[var(--line)] bg-white px-5 py-14 md:col-span-6 md:border-l md:border-t-0 md:px-8 md:py-16">
+      <div className="hero-enter hero-enter-5 col-span-12 flex flex-col justify-center border-t border-[var(--line)] bg-white px-5 py-14 md:col-span-6 md:border-l md:border-t-0 md:px-8 md:py-16">
         {children}
       </div>
     </GridBand>

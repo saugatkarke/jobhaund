@@ -1,5 +1,9 @@
 import { redirect } from "next/navigation";
-import { AccountClient } from "@/components/AccountClient";
+import {
+  AccountClient,
+  AccountPlanCard,
+  AccountWelcome,
+} from "@/components/AccountClient";
 import { MarketingShell } from "@/components/MarketingShell";
 import { GridBand } from "@/components/PageGrid";
 import { getOptionalSession } from "@/lib/session";
@@ -20,12 +24,24 @@ export default async function AccountPage({
 
   return (
     <MarketingShell>
-      <GridBand as="section" className="border-b border-[var(--line)]">
-        <div className="col-span-12 px-5 py-14 md:col-span-6 md:col-start-4 md:px-6 md:py-16">
-          <h1 className="text-2xl font-bold tracking-tight">Account</h1>
-          <div className="mt-8">
-            <AccountClient checkoutSuccess={checkout === "success"} />
+      <GridBand
+        as="section"
+        className="border-b border-[var(--line)] md:h-full"
+      >
+        <div className="col-span-12 flex flex-col justify-center px-5 py-14 md:col-span-6 md:px-8 md:py-16">
+          <AccountWelcome />
+          <h1 className="hero-enter hero-enter-2 mt-2 text-4xl font-bold tracking-tight md:text-5xl">
+            <span className="text-gradient-mint-gold">Your dashboard</span>
+          </h1>
+          <p className="hero-enter hero-enter-3 mt-4 max-w-md text-[var(--muted)]">
+            Manage your plan, billing, and extension connection.
+          </p>
+          <div className="hero-enter hero-enter-4 mt-8">
+            <AccountPlanCard checkoutSuccess={checkout === "success"} />
           </div>
+        </div>
+        <div className="hero-enter hero-enter-5 col-span-12 flex flex-col justify-center border-t border-[var(--line)] bg-white px-5 py-14 md:col-span-6 md:border-l md:border-t-0 md:px-8 md:py-16">
+          <AccountClient checkoutSuccess={checkout === "success"} />
         </div>
       </GridBand>
     </MarketingShell>
