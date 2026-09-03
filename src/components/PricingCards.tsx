@@ -212,7 +212,7 @@ export function PricingCards({
     try {
       const result = await startPaddleCheckout(priceId);
       if (result.status === "login") {
-        window.location.href = "/login?next=/pricing";
+        window.location.href = "/signup?next=/pricing";
         return;
       }
       if (result.status === "error") {

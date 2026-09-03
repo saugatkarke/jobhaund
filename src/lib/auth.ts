@@ -23,11 +23,24 @@ function createAuth() {
     }),
     emailAndPassword: {
       enabled: true,
+      requireEmailVerification: true,
       sendResetPassword: async ({ user, url }) => {
         await sendAuthEmail({
           to: user.email,
           subject: "Reset your JobHaund password",
           text: `Reset your password: ${url}`,
+        });
+      },
+    },
+    emailVerification: {
+      sendOnSignUp: true,
+      sendOnSignIn: true,
+      autoSignInAfterVerification: true,
+      sendVerificationEmail: async ({ user, url }) => {
+        await sendAuthEmail({
+          to: user.email,
+          subject: "Verify your JobHaund email",
+          text: `Verify your email: ${url}`,
         });
       },
     },

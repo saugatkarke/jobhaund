@@ -71,7 +71,14 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
       callbackURL: nextPath,
     });
     setPending(false);
-    if (result) setError(result.message || "Could not sign in.");
+    if (result) {
+      const status = (result as { status?: number }).status;
+      if (status === 403) {
+        setError("Please verify your email first. We sent you a fresh verification link.");
+        return;
+      }
+      setError(result.message || "Could not sign in.");
+    }
   }
 
   async function onMagic() {
@@ -139,23 +146,31 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
   );
 }
 
-export function SignupForm() {
+export function SignupForm({ nextPath = "/account" }: { nextPath?: string }) {
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [pending, setPending] = useState(false);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setNotice("");
     setPending(true);
-    const form = new FormData(event.currentTarget);
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     const { error: result } = await authClient.signUp.email({
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
       password: String(form.get("password") || ""),
-      callbackURL: "/account",
+      callbackURL: nextPath,
     });
     setPending(false);
-    if (result) setError(result.message || "Could not create account.");
+    if (result) {
+      setError(result.message || "Could not create account.");
+      return;
+    }
+    setNotice("Account created. Check your inbox and verify your email before signing in.");
+    formEl.reset();
   }
 
   return (
@@ -170,9 +185,10 @@ export function SignupForm() {
         <input name="password" type="password" required minLength={8} className="field" />
       </Field>
       <button type="submit" className="btn-primary w-full" disabled={pending}>
-        Create account
+        {pending ? "Creating account..." : "Create account"}
       </button>
       {error ? <AuthError message={error} /> : null}
+      {notice ? <AuthNotice message={notice} /> : null}
       <p className="flex flex-wrap items-center gap-x-1.5 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
         Already have an account?
         <AuthLink href="/login" icon={<IconUser className="h-3.5 w-3.5" />}>

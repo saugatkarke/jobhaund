@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { GridBand } from "./PageGrid";
-import { IconStar } from "./icons";
+import { IconStar, IconUser } from "./icons";
 import { Logo } from "./Logo";
+import { useSession } from "./SessionProvider";
 
 function HeaderRating() {
   return (
@@ -30,6 +33,8 @@ function HeaderRating() {
 }
 
 export function SiteHeader() {
+  const { email, loading, signOut } = useSession();
+
   return (
     <GridBand
       as="header"
@@ -63,19 +68,42 @@ export function SiteHeader() {
         </Link>
       </nav>
       <div className="col-span-8 flex h-14 items-center justify-end gap-2 px-3 text-sm md:col-span-3 md:gap-3 md:px-4">
-        <HeaderRating />
-        <Link
-          href="/login"
-          className="text-neutral-700 transition-colors duration-200 hover:text-black"
-        >
-          Login
-        </Link>
-        <Link
-          href="/signup"
-          className="btn-primary whitespace-nowrap px-3 py-2 text-xs md:px-4 md:py-2.5 md:text-sm"
-        >
-          Get started
-        </Link>
+        {!loading && !email ? <HeaderRating /> : null}
+        {loading ? (
+          <span className="text-neutral-400">…</span>
+        ) : email ? (
+          <>
+            <Link
+              href="/account"
+              className="flex items-center gap-1.5 text-neutral-700 transition-colors duration-200 hover:text-black"
+            >
+              <IconUser className="h-4 w-4" />
+              <span className="hidden md:inline">Account</span>
+            </Link>
+            <button
+              type="button"
+              onClick={signOut}
+              className="text-neutral-700 transition-colors duration-200 hover:text-black"
+            >
+              Sign out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="text-neutral-700 transition-colors duration-200 hover:text-black"
+            >
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="btn-primary whitespace-nowrap px-3 py-2 text-xs md:px-4 md:py-2.5 md:text-sm"
+            >
+              Get started
+            </Link>
+          </>
+        )}
       </div>
     </GridBand>
   );
