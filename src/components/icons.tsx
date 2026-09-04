@@ -128,6 +128,26 @@ export function IconDownload({ className }: IconProps) {
   );
 }
 
+export function IconLogout({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path
+        d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16 17l5-5-5-5M21 12H9"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function IconUser({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>

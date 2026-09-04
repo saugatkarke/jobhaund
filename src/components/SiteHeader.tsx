@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { GridBand } from "./PageGrid";
-import { IconStar, IconUser } from "./icons";
+import { IconLogout, IconStar, IconUser } from "./icons";
 import { Logo } from "./Logo";
 import { useSession } from "./SessionProvider";
 
@@ -83,8 +83,9 @@ export function SiteHeader() {
             <button
               type="button"
               onClick={signOut}
-              className="text-neutral-700 transition-colors duration-200 hover:text-black"
+              className="flex items-center gap-1.5 text-neutral-700 transition-colors duration-200 hover:text-black"
             >
+              <IconLogout className="h-4 w-4" />
               Sign out
             </button>
           </>
