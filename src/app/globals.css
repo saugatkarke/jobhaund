@@ -1381,6 +1381,7 @@ body {
 /* --- Pricing cards --- */
 
 .pricing-toggle {
+  position: relative;
   display: flex;
   width: max-content;
   margin-inline: auto;
@@ -1392,7 +1393,26 @@ body {
   background: #f4f6f8;
 }
 
+.pricing-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  z-index: 0;
+  width: var(--thumb-w);
+  height: calc(100% - 6px);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  pointer-events: none;
+  transform: translateX(var(--thumb-x));
+  transition:
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .pricing-toggle-option {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1406,13 +1426,19 @@ body {
   line-height: 1;
   cursor: pointer;
   transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease;
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .pricing-toggle-option[aria-checked="true"] {
   background: #fff;
   border-color: var(--line);
+}
+
+.pricing-toggle.is-ready .pricing-toggle-option[aria-checked="true"] {
+  background: transparent;
+  border-color: transparent;
 }
 
 .pricing-toggle-save {
@@ -1490,18 +1516,62 @@ body {
   z-index: 1;
 }
 
+.pricing-card-title {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pricing-card-badge-slot {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  bottom: 0;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pricing-card-badge-slot .pricing-card-badge {
+  transform: translateY(120%);
+  opacity: 0;
+  transition:
+    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+}
+
+.pricing-card-badge-slot.is-in {
+  pointer-events: auto;
+}
+
+.pricing-card-badge-slot.is-in .pricing-card-badge {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 .pricing-card-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
+  gap: 5px;
+  max-width: 100%;
+  padding: 2px 8px 2px 6px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   background: var(--gold);
   color: #000;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pricing-card-badge-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .pricing-card-price {
@@ -1587,6 +1657,22 @@ body {
   font-weight: 400;
   color: rgba(0, 0, 0, 0.5);
   padding-bottom: 6px;
+}
+
+.pricing-card-period-text {
+  display: inline-block;
+  animation: pricing-period-in 0.32s ease both;
+}
+
+@keyframes pricing-period-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .pricing-card-rule {
@@ -1724,8 +1810,15 @@ body {
   .footer-mole-hole,
   .footer-mole-sprite,
   .pricing-toggle-option,
+  .pricing-toggle-thumb,
+  .pricing-card-badge-slot,
+  .pricing-card-badge-slot .pricing-card-badge,
   .pricing-card-cta {
     transition: none;
+  }
+
+  .pricing-card-period-text {
+    animation: none;
   }
 
   .price-slot.is-spinning .price-slot-strip {

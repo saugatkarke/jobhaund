@@ -7,7 +7,7 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from "react";
-import { IconCheckCircle } from "./icons";
+import { IconCheckCircle, IconCoffee } from "./icons";
 import { startPaddleCheckout } from "@/lib/paddle-checkout";
 import {
   MONTHLY_AMOUNT,
@@ -180,6 +180,8 @@ const PRO_FEATURES = [
   "Score a resume against the JD",
 ];
 
+const PRO_BADGE = "Skip one coffee. Get Pro.";
+
 export function PricingCards({
   monthlyPriceId,
   yearlyPriceId,
@@ -192,6 +194,8 @@ export function PricingCards({
   const [interval, setInterval] = useState<Interval>("monthly");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+  const toggleRef = useRef<HTMLDivElement>(null);
+  const [thumb, setThumb] = useState({ left: 0, width: 0 });
   const yearlyOff = yearlyDiscountPercent();
   const proPrice =
     interval === "monthly"
@@ -199,6 +203,30 @@ export function PricingCards({
       : formatPrice(YEARLY_AMOUNT);
   const proPeriod = interval === "monthly" ? "Monthly" : "Yearly";
   const priceId = interval === "monthly" ? monthlyPriceId : yearlyPriceId;
+
+  useLayoutEffect(() => {
+    const root = toggleRef.current;
+    if (!root) return;
+
+    function measure(el: HTMLDivElement) {
+      const active = el.querySelector<HTMLElement>('[aria-checked="true"]');
+      if (!active) return;
+      const rootBox = el.getBoundingClientRect();
+      const box = active.getBoundingClientRect();
+      setThumb({
+        left: box.left - rootBox.left,
+        width: box.width,
+      });
+    }
+
+    measure(root);
+    const observer = new ResizeObserver(() => measure(root));
+    observer.observe(root);
+    for (const option of root.querySelectorAll("button")) {
+      observer.observe(option);
+    }
+    return () => observer.disconnect();
+  }, [interval, yearlyOff]);
 
   function onToggleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
@@ -226,11 +254,26 @@ export function PricingCards({
   return (
     <div className="col-span-12 px-5 py-10 md:px-6 md:py-16">
       <div
+        ref={toggleRef}
         role="radiogroup"
         aria-label="Billing period"
-        className="pricing-toggle"
+        className={
+          thumb.width > 0 ? "pricing-toggle is-ready" : "pricing-toggle"
+        }
         onKeyDown={onToggleKeyDown}
       >
+        {thumb.width > 0 ? (
+          <span
+            className="pricing-toggle-thumb"
+            aria-hidden="true"
+            style={
+              {
+                "--thumb-x": `${thumb.left}px`,
+                "--thumb-w": `${thumb.width}px`,
+              } as CSSProperties
+            }
+          />
+        ) : null}
         <button
           type="button"
           role="radio"
@@ -289,13 +332,29 @@ export function PricingCards({
 
         <article className="pricing-card md:col-span-6">
           <div className="pricing-card-head pricing-card-head-pro">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="pricing-card-title">
               <h2 className="text-[17px] font-medium tracking-tight">Pro</h2>
-              <span className="pricing-card-badge">Popular</span>
+              <div
+                className={
+                  interval === "monthly"
+                    ? "pricing-card-badge-slot is-in"
+                    : "pricing-card-badge-slot"
+                }
+                aria-hidden={interval !== "monthly"}
+              >
+                <span className="pricing-card-badge">
+                  <IconCoffee className="pricing-card-badge-icon" />
+                  {PRO_BADGE}
+                </span>
+              </div>
             </div>
             <p className="pricing-card-price tabular-nums">
               <SlotPrice key={interval} value={proPrice} slotId={interval} />
-              <span className="pricing-card-period">/{proPeriod}</span>
+              <span className="pricing-card-period">
+                <span key={proPeriod} className="pricing-card-period-text">
+                  /{proPeriod}
+                </span>
+              </span>
             </p>
             <div className="pricing-card-rule" aria-hidden="true" />
             <p className="pricing-card-tagline">

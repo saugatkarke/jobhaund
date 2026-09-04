@@ -278,6 +278,32 @@ export function IconStar({
   );
 }
 
+export function IconCoffee({ className }: IconProps) {
+  return (
+    <svg {...strokeProps(className)}>
+      <path
+        d="M8 3.6c.2 1 .8 1.4 1.5 1.4M12.2 3.6c.2 1 .8 1.4 1.5 1.4"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+      <path
+        d="M4.8 9h13.2v6.4A3.8 3.8 0 0 1 14.2 19.2H8.6A3.8 3.8 0 0 1 4.8 15.4V9Z"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M18 11h1.5a2.4 2.4 0 1 1 0 4.8H18"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function IconCheckCircle({ className }: IconProps) {
   return (
     <svg {...strokeProps(className)}>
