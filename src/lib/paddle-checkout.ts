@@ -5,6 +5,10 @@ export type CheckoutResult =
   | { status: "login" }
   | { status: "error"; message: string };
 
+export function checkoutSuccessUrl(origin: string): string {
+  return `${origin.replace(/\/$/, "")}/account?checkout=success`;
+}
+
 export async function startPaddleCheckout(
   priceId: string,
 ): Promise<CheckoutResult> {
@@ -41,7 +45,16 @@ export async function startPaddleCheckout(
           : "sandbox",
       token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || "",
     });
-    await paddle?.Checkout.open({ transactionId: data.transactionId });
+    await paddle?.Checkout.open({
+      transactionId: data.transactionId,
+      settings: {
+        successUrl: checkoutSuccessUrl(
+          typeof window !== "undefined"
+            ? window.location.origin
+            : process.env.NEXT_PUBLIC_APP_URL || "",
+        ),
+      },
+    });
     return { status: "ok" };
   } catch {
     return {

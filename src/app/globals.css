@@ -493,7 +493,7 @@ body {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #0c0e14;
+  background: #0b120f;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.08);
   animation: pro-wave 14s ease-in-out infinite;
@@ -507,20 +507,21 @@ body {
   pointer-events: none;
   background:
     radial-gradient(
-      360px 260px at calc(75% + var(--pro-bx) * 60px)
-        calc(30% + var(--pro-by) * 40px),
-      rgba(90, 120, 255, 0.22),
-      transparent 65%
+      380px 260px at calc(78% + var(--pro-bx) * 50px)
+        calc(18% + var(--pro-by) * 36px),
+      rgba(32, 252, 143, 0.38),
+      transparent 62%
     ),
     radial-gradient(
-      280px 200px at calc(90% + var(--pro-bx) * -30px)
-        calc(80% + var(--pro-by) * -20px),
-      rgba(140, 80, 255, 0.14),
-      transparent 60%
+      300px 220px at calc(92% + var(--pro-bx) * -28px)
+        calc(86% + var(--pro-by) * -18px),
+      rgba(253, 184, 51, 0.32),
+      transparent 58%
     ),
     radial-gradient(
-      200px 180px at 20% 90%,
-      rgba(60, 80, 200, 0.08),
+      240px 200px at calc(18% + var(--pro-bx) * 20px)
+        calc(88% + var(--pro-by) * 16px),
+      rgba(32, 252, 143, 0.16),
       transparent 55%
     );
 }

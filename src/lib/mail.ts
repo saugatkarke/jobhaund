@@ -1,5 +1,13 @@
 import { Resend } from "resend";
 
+export function assertMailDelivered(result: {
+  error?: unknown;
+}): void {
+  if (result.error) {
+    throw new Error("Could not send email");
+  }
+}
+
 export async function sendAuthEmail(options: {
   to: string;
   subject: string;
@@ -13,10 +21,11 @@ export async function sendAuthEmail(options: {
     return;
   }
   const resend = new Resend(key);
-  await resend.emails.send({
+  const result = await resend.emails.send({
     from,
     to: options.to,
     subject: options.subject,
     text: options.text,
   });
+  assertMailDelivered(result);
 }
