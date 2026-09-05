@@ -72,8 +72,8 @@ function sliceHeight(total: number, index: number, count: number) {
 
 export function JobFlowSankey() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const sourceRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const targetRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const sourceRefs = useRef<Record<string, HTMLElement | null>>({});
+  const targetRefs = useRef<Record<string, HTMLElement | null>>({});
   const leftListRef = useRef<HTMLDivElement>(null);
   const rightListRef = useRef<HTMLDivElement>(null);
   const [ribbons, setRibbons] = useState<Ribbon[]>([]);
