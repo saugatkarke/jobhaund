@@ -43,10 +43,10 @@ export function SiteHeader() {
     >
       <Link
         href="/"
+        aria-label={APP_NAME}
         className="col-span-4 flex h-14 items-center gap-2 px-3 text-sm font-medium md:col-span-3 md:px-4"
       >
-        <Logo />
-        <span>{APP_NAME}</span>
+        <Logo priority />
       </Link>
       <nav className="hidden items-center justify-center gap-6 px-4 text-sm text-neutral-600 md:col-span-6 md:flex">
         <Link
