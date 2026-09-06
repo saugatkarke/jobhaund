@@ -1,6 +1,7 @@
 import { MarketingShell } from "@/components/MarketingShell";
 import { GridBand } from "@/components/PageGrid";
 import { Reveal } from "@/components/Reveal";
+import { APP_NAME } from "@/lib/copy";
 
 export default function PrivacyPage() {
   return (
@@ -11,7 +12,7 @@ export default function PrivacyPage() {
           <p className="hero-enter hero-enter-3 mt-2 text-sm text-[var(--muted)]">Last updated: 26 August 2026</p>
           <Reveal delay={80} className="mt-8 space-y-4 text-[var(--muted)]">
             <p>
-              JobHaund is not affiliated with Indeed or Seek. This
+              {APP_NAME} is not affiliated with Indeed or Seek. This
               website collects an email address and account data so we can provide
               Pro for the Indeed and Seek extensions.
             </p>

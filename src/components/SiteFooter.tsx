@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { DISCLAIMER } from "@/lib/copy";
+import { APP_NAME, DISCLAIMER } from "@/lib/copy";
 import { FooterWhackAMole } from "./FooterWhackAMole";
 import { GridBand } from "./PageGrid";
 import { Logo } from "./Logo";
@@ -11,7 +11,7 @@ export function SiteFooter() {
       <div className="col-span-12 px-4 py-10 md:col-span-3">
         <div className="flex items-center gap-2 text-sm font-medium">
           <Logo className="h-7 w-7" />
-          JobHaund
+          {APP_NAME}
         </div>
         <p className="mt-3 text-sm text-[var(--muted)]">
           Track Indeed and Seek applications locally. Upgrade here for Hide jobs

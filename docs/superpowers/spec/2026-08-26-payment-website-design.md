@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-26  
 **Status:** Implemented in this repo (accounts + Paddle + entitlement/PKCE APIs)  
-**Repo:** this folder (`Freemium website`). The Next.js app lives at the **repository root**, not a nested `web/`.  
+**Repo:** this folder (`Jobcific website`). The Next.js app lives at the **repository root**, not a nested `web/`.  
 **Parent product spec:** `docs/superpowers/spec/2026-08-24-freemium-pro-design.md`  
 **Visual reference:** SaaS landing layout supplied 2026-08-26 (hero, feature cards, FAQ accordion, mesh CTA, footer). Brand colors stay the extension tokens, not the purple template.
 

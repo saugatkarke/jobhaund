@@ -5,12 +5,14 @@ import { magicLink } from "better-auth/plugins";
 import { getDb } from "./db";
 import { sendAuthEmail } from "./mail";
 import { appTrustedOrigins } from "./auth-origins";
+import { APP_NAME } from "./copy";
 import * as schema from "./schema";
 
 export type Auth = ReturnType<typeof createAuth>;
 
 function createAuth() {
   return betterAuth({
+    appName: APP_NAME,
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
     secret: process.env.BETTER_AUTH_SECRET,
     trustedOrigins: appTrustedOrigins(),
@@ -29,7 +31,7 @@ function createAuth() {
       sendResetPassword: async ({ user, url }) => {
         await sendAuthEmail({
           to: user.email,
-          subject: "Reset your JobHaund password",
+          subject: `Reset your ${APP_NAME} password`,
           text: `Reset your password: ${url}`,
         });
       },
@@ -41,7 +43,7 @@ function createAuth() {
       sendVerificationEmail: async ({ user, url }) => {
         await sendAuthEmail({
           to: user.email,
-          subject: "Verify your JobHaund email",
+          subject: `Verify your ${APP_NAME} email`,
           text: `Verify your email: ${url}`,
         });
       },
@@ -51,7 +53,7 @@ function createAuth() {
         sendMagicLink: async ({ email, url }) => {
           await sendAuthEmail({
             to: email,
-            subject: "Sign in to JobHaund",
+            subject: `Sign in to ${APP_NAME}`,
             text: `Sign in: ${url}`,
           });
         },

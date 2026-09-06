@@ -1,4 +1,4 @@
-# JobHaund — payment website
+# Jobcific — payment website
 
 Standalone Next.js site for accounts and Paddle Pro checkout. One Pro plan covers the Indeed and Seek Chrome extensions. They later call `GET /api/me/entitlement`.
 

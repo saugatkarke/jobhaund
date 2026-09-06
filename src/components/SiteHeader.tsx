@@ -5,6 +5,7 @@ import { GridBand } from "./PageGrid";
 import { IconLogout, IconStar, IconUser } from "./icons";
 import { Logo } from "./Logo";
 import { useSession } from "./SessionProvider";
+import { APP_NAME } from "@/lib/copy";
 
 function HeaderRating() {
   return (
@@ -45,7 +46,7 @@ export function SiteHeader() {
         className="col-span-4 flex h-14 items-center gap-2 px-3 text-sm font-medium md:col-span-3 md:px-4"
       >
         <Logo />
-        <span>JobHaund</span>
+        <span>{APP_NAME}</span>
       </Link>
       <nav className="hidden items-center justify-center gap-6 px-4 text-sm text-neutral-600 md:col-span-6 md:flex">
         <Link

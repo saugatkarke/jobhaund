@@ -1,6 +1,6 @@
 export const MONTHLY_LABEL = "$4.99 / month";
 export const YEARLY_LABEL = "$39 / year";
-export const PRODUCT_NAME = "JobHaund Pro";
+export const PRODUCT_NAME = "Jobcific Pro";
 export const MONTHLY_AMOUNT = 4.99;
 export const YEARLY_AMOUNT = 39;
 

@@ -1,6 +1,7 @@
 import { ResetForm } from "@/components/AuthForm";
 import { AuthLayout } from "@/components/AuthLayout";
 import { MarketingShell } from "@/components/MarketingShell";
+import { APP_NAME } from "@/lib/copy";
 
 export default async function ResetPasswordPage({
   searchParams,
@@ -13,7 +14,7 @@ export default async function ResetPasswordPage({
       <AuthLayout
         eyebrow="Account"
         title="Reset password"
-        description="Choose a new password for your JobHaund account."
+        description={`Choose a new password for your ${APP_NAME} account.`}
       >
         {token ? (
           <ResetForm token={token} />

@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { APP_NAME } from "./copy";
 
 export function assertMailDelivered(result: {
   error?: unknown;
@@ -15,7 +16,7 @@ export async function sendAuthEmail(options: {
 }): Promise<void> {
   const key = process.env.RESEND_API_KEY;
   const from =
-    process.env.RESEND_FROM || "JobHaund <noreply@localhost>";
+    process.env.RESEND_FROM || `${APP_NAME} <noreply@localhost>`;
   if (!key) {
     console.info("[mail:dev]", options.to, options.subject, options.text);
     return;
