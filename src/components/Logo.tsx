@@ -14,7 +14,7 @@ export function Logo({
       alt={APP_NAME}
       width={879}
       height={219}
-      className={className}
+      className={`object-contain ${className}`}
       priority={priority}
     />
   );
