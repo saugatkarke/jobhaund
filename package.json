@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "email": "email dev --dir emails --port 3333"
   },
   "dependencies": {
     "@paddle/paddle-js": "^1.6.5",
@@ -19,10 +20,12 @@
     "postgres": "^3.4.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-email": "^6.9.3",
     "resend": "^6.24.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@react-email/ui": "^6.9.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

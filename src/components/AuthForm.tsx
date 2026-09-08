@@ -94,7 +94,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
       setError("Could not send email.");
       return;
     }
-    setNotice("Check your email for a sign-in link. In local dev it may appear in the server log.");
+    setNotice("Check your email for a sign-in link.");
   }
 
   return (
@@ -219,7 +219,7 @@ export function ForgotForm() {
       setError("Could not send email.");
       return;
     }
-    setNotice("If that email exists, we sent a reset link. In local dev it may appear in the server log.");
+    setNotice("If that email exists, we sent a reset link. Check your inbox.");
   }
 
   return (

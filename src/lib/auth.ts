@@ -31,8 +31,9 @@ function createAuth() {
       sendResetPassword: async ({ user, url }) => {
         await sendAuthEmail({
           to: user.email,
-          subject: `Reset your ${APP_NAME} password`,
-          text: `Reset your password: ${url}`,
+          kind: "reset",
+          url,
+          name: user.name,
         });
       },
     },
@@ -43,8 +44,9 @@ function createAuth() {
       sendVerificationEmail: async ({ user, url }) => {
         await sendAuthEmail({
           to: user.email,
-          subject: `Verify your ${APP_NAME} email`,
-          text: `Verify your email: ${url}`,
+          kind: "verify",
+          url,
+          name: user.name,
         });
       },
     },
@@ -53,8 +55,8 @@ function createAuth() {
         sendMagicLink: async ({ email, url }) => {
           await sendAuthEmail({
             to: email,
-            subject: `Sign in to ${APP_NAME}`,
-            text: `Sign in: ${url}`,
+            kind: "magic-link",
+            url,
           });
         },
       }),
