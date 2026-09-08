@@ -34,11 +34,25 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    authClient.getSession().then(({ data }) => {
-      setEmail(data?.user?.email || null);
-      setName(data?.user?.name || null);
-      setLoading(false);
-    });
+    let cancelled = false;
+    authClient
+      .getSession()
+      .then(({ data }) => {
+        if (cancelled) return;
+        setEmail(data?.user?.email || null);
+        setName(data?.user?.name || null);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setEmail(null);
+        setName(null);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function signOut() {

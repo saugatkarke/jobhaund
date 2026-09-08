@@ -34,7 +34,7 @@ function HeaderRating() {
 }
 
 export function SiteHeader() {
-  const { email, loading, signOut } = useSession();
+  const { email, signOut } = useSession();
 
   return (
     <GridBand
@@ -69,10 +69,7 @@ export function SiteHeader() {
         </Link>
       </nav>
       <div className="col-span-8 flex h-14 items-center justify-end gap-2 px-3 text-sm md:col-span-3 md:gap-3 md:px-4">
-        {!loading && !email ? <HeaderRating /> : null}
-        {loading ? (
-          <span className="text-neutral-400">…</span>
-        ) : email ? (
+        {email ? (
           <>
             <Link
               href="/account"
@@ -92,6 +89,7 @@ export function SiteHeader() {
           </>
         ) : (
           <>
+            <HeaderRating />
             <Link
               href="/login"
               className="text-neutral-700 transition-colors duration-200 hover:text-black"
