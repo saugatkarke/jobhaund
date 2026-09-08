@@ -19,6 +19,10 @@ const ITEMS = [
     q: "Can I cancel anytime?",
     a: "Yes. If you cancel at period end you keep Pro until the paid period ends.",
   },
+  {
+    q: "What is your refund policy?",
+    a: "Your first Pro payment has a 30-day money-back guarantee. Later renewals are reviewed case by case. Paddle is the merchant of record and processes refunds. Email support or use paddle.net.",
+  },
 ];
 
 export function FaqAccordion() {

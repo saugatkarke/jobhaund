@@ -1740,6 +1740,62 @@ body {
   opacity: 0.72;
 }
 
+.pricing-legal {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 4px;
+  max-width: 18rem;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(0, 0, 0, 0.72);
+  text-align: left;
+}
+
+.pricing-legal input {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #000;
+}
+
+.pricing-legal a {
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal-body {
+  color: var(--muted);
+}
+
+.legal-body h2 {
+  margin-top: 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.legal-body p + p,
+.legal-body ul {
+  margin-top: 0.75rem;
+}
+
+.legal-body ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.legal-body li + li {
+  margin-top: 0.5rem;
+}
+
+.legal-body a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .pricing-card-features {
   display: flex;
   flex: 1;

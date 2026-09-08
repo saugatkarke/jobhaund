@@ -184,6 +184,17 @@ export function SignupForm({ nextPath = "/account" }: { nextPath?: string }) {
       <Field label="Password" hint="At least 8 characters.">
         <input name="password" type="password" required minLength={8} className="field" />
       </Field>
+      <p className="text-xs text-[var(--muted)]">
+        By creating an account you agree to the{" "}
+        <Link href="/terms" className="text-black underline-offset-2 hover:underline">
+          Terms of Service
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" className="text-black underline-offset-2 hover:underline">
+          Privacy Policy
+        </Link>
+        .
+      </p>
       <button type="submit" className="btn-primary w-full" disabled={pending}>
         {pending ? "Creating account..." : "Create account"}
       </button>

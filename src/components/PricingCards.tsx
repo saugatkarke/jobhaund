@@ -7,7 +7,9 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from "react";
+import Link from "next/link";
 import { IconCheckCircle, IconCoffee } from "./icons";
+import { canStartSubscribe } from "@/lib/legal";
 import { startPaddleCheckout } from "@/lib/paddle-checkout";
 import {
   MONTHLY_AMOUNT,
@@ -193,6 +195,7 @@ export function PricingCards({
 }) {
   const [interval, setInterval] = useState<Interval>("monthly");
   const [pending, setPending] = useState(false);
+  const [agreedToLegal, setAgreedToLegal] = useState(false);
   const [error, setError] = useState("");
   const toggleRef = useRef<HTMLDivElement>(null);
   const [thumb, setThumb] = useState({ left: 0, width: 0 });
@@ -236,6 +239,10 @@ export function PricingCards({
 
   async function subscribe() {
     setError("");
+    if (!canStartSubscribe(agreedToLegal)) {
+      setError("Please agree to the Terms of Service and Refund Policy.");
+      return;
+    }
     setPending(true);
     try {
       const result = await startPaddleCheckout(priceId);
@@ -361,6 +368,33 @@ export function PricingCards({
               Best for people who want to hide listings and score a resume
               against the JD.
             </p>
+            <label className="pricing-legal">
+              <input
+                type="checkbox"
+                checked={agreedToLegal}
+                onChange={(event) => {
+                  setAgreedToLegal(event.target.checked);
+                  if (event.target.checked) setError("");
+                }}
+              />
+              <span>
+                I agree to the{" "}
+                <Link
+                  href="/terms"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/refunds"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  Refund Policy
+                </Link>
+                .
+              </span>
+            </label>
             <button
               type="button"
               className="pricing-card-cta"

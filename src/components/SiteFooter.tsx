@@ -1,5 +1,11 @@
 import Link from "next/link";
 import { DISCLAIMER } from "@/lib/copy";
+import {
+  LEGAL_PAGES,
+  SUPPORT_EMAIL,
+  SUPPORT_PHONE,
+  SUPPORT_PHONE_TEL,
+} from "@/lib/legal";
 import { FooterWhackAMole } from "./FooterWhackAMole";
 import { GridBand } from "./PageGrid";
 import { Logo } from "./Logo";
@@ -55,12 +61,22 @@ export function SiteFooter() {
       <div className="col-span-12 border-t border-[var(--line)] px-4 py-10 md:col-span-3 md:border-t-0 md:border-l">
         <p className="text-sm font-medium">Legal</p>
         <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
-          <li>
-            <Link href="/privacy" className="hover:text-black">
-              Privacy
-            </Link>
-          </li>
+          {LEGAL_PAGES.map((page) => (
+            <li key={page.href}>
+              <Link href={page.href} className="hover:text-black">
+                {page.label}
+              </Link>
+            </li>
+          ))}
         </ul>
+        <p className="mt-4 space-y-1 text-sm text-[var(--muted)]">
+          <a href={`mailto:${SUPPORT_EMAIL}`} className="block hover:text-black">
+            {SUPPORT_EMAIL}
+          </a>
+          <a href={`tel:${SUPPORT_PHONE_TEL}`} className="block hover:text-black">
+            {SUPPORT_PHONE}
+          </a>
+        </p>
       </div>
       <p className="col-span-12 border-t border-[var(--line)] px-4 py-4 text-center text-xs text-[var(--muted)]">
         {DISCLAIMER}
