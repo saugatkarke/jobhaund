@@ -28,7 +28,7 @@ export default function HomePage() {
             <p className="hero-enter hero-enter-3 mx-auto mt-5 max-w-xl text-[var(--muted)]">
               Jobcific shows you the listing data first, scores the fit second,
               and only then do you rewrite. Stop treating every posting like it
-              deserves a custom resume. Most of them don't.
+              deserves a custom resume. Most of them don&apos;t.
             </p>
             <div className="hero-enter hero-enter-4 mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/pricing" className="btn-primary">
