@@ -12,7 +12,7 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: APP_NAME,
   description:
-    "Track Indeed and Seek jobs locally. Upgrade to Pro for Hide jobs and ATS results.",
+    "Don't waste hours wondering if a resume is even worth it. See job data on Indeed and Seek, then score the fit before you rewrite.",
 };
 
 export default function RootLayout({

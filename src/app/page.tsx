@@ -23,12 +23,12 @@ export default function HomePage() {
         <MeshHero>
           <div className="mx-auto max-w-3xl px-5 pb-16 pt-16 text-center md:px-6 md:pb-20">
             <h1 className="hero-enter hero-enter-2 text-4xl font-bold tracking-tight md:text-6xl">
-              Track Indeed and Seek jobs locally. Unlock Hide and ATS with Pro.
+              “Tailor every resume” <br/> is the advice that’s burning your weekends.
             </h1>
             <p className="hero-enter hero-enter-3 mx-auto mt-5 max-w-xl text-[var(--muted)]">
-              One Pro plan covers both Indeed and Seek. Metrics, Copy JD, Save,
-              and a local Kanban stay free. Pay here with Paddle when you want
-              Hide / Unhide and ATS score results.
+              Jobcific shows you the listing data first, scores the fit second,
+              and only then do you rewrite. Stop treating every posting like it
+              deserves a custom resume. Most of them don't.
             </p>
             <div className="hero-enter hero-enter-4 mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/pricing" className="btn-primary">
@@ -145,10 +145,7 @@ export default function HomePage() {
             Apply for your dream job with clarity
           </h2>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/pricing"
-              className="btn-primary"
-            >
+            <Link href="/pricing" className="btn-primary">
               Get Pro
             </Link>
             <Link

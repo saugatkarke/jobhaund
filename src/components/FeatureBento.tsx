@@ -159,35 +159,6 @@ export function FeatureBento() {
   return (
     <div className="grid gap-3 md:grid-cols-12">
       <Tile
-        className="min-h-[460px] md:col-span-8 md:row-span-2"
-        wellClassName="h-full overflow-hidden"
-        title="Save and track"
-        body="Save a role and move it Saved → Applied → Interview. Stored in your browser, not our servers."
-      >
-        <JobFlowSankey />
-      </Tile>
-
-      <Tile
-        className="min-h-[220px] md:col-span-4"
-        pro
-        title="Hide jobs"
-        body="Clear cards you do not want. They stay gone until you unhide."
-      >
-        <HideMock />
-      </Tile>
-
-      <Tile
-        className="min-h-[220px] md:col-span-4"
-        pro
-        title="ATS scoring"
-        body="Score a stored resume against the job description."
-      >
-        <div className="rounded-[4px] border border-[var(--line)] bg-white p-3">
-          <AtsScoreMock compact score={72} dimensions={ATS_DIMENSIONS} />
-        </div>
-      </Tile>
-
-      <Tile
         className="min-h-[220px] md:col-span-4"
         title="Salary reveal"
         body="Uncover pay on Indeed and Seek cards when the listing hides it."
@@ -264,6 +235,35 @@ export function FeatureBento() {
             chips={<Chip tone="date">1w ago</Chip>}
           />
         </CardStack>
+      </Tile>
+
+      <Tile
+        className="min-h-[460px] md:col-span-8 md:row-span-2"
+        wellClassName="h-full overflow-hidden"
+        title="Save and track"
+        body="Save a role and move it Saved → Applied → Interview. Stored in your browser, not our servers."
+      >
+        <JobFlowSankey />
+      </Tile>
+
+      <Tile
+        className="min-h-[220px] md:col-span-4"
+        pro
+        title="Hide jobs"
+        body="Clear cards you do not want. They stay gone until you unhide."
+      >
+        <HideMock />
+      </Tile>
+
+      <Tile
+        className="min-h-[220px] md:col-span-4"
+        pro
+        title="ATS scoring"
+        body="Score a stored resume against the job description."
+      >
+        <div className="rounded-[4px] border border-[var(--line)] bg-white p-3">
+          <AtsScoreMock compact score={72} dimensions={ATS_DIMENSIONS} />
+        </div>
       </Tile>
     </div>
   );
