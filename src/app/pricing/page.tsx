@@ -4,8 +4,6 @@ import { GridBand } from "@/components/PageGrid";
 import { Reveal } from "@/components/Reveal";
 import { monthlyPriceId, yearlyPriceId } from "@/lib/pricing";
 
-const installHref = process.env.NEXT_PUBLIC_CWS_URL || "/#features";
-
 export default function PricingPage() {
   return (
     <MarketingShell>
@@ -25,7 +23,6 @@ export default function PricingPage() {
           <PricingCards
             monthlyPriceId={monthlyPriceId()}
             yearlyPriceId={yearlyPriceId()}
-            installHref={installHref}
           />
         </Reveal>
       </GridBand>

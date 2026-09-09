@@ -9,7 +9,7 @@ import { APP_NAME } from "@/lib/copy";
 
 function HeaderRating() {
   return (
-    <span className="header-rating" aria-label="5 star rating">
+    <span className="header-rating hidden md:inline-flex" aria-label="5 star rating">
       <span className="header-rating-stars" aria-hidden>
         {Array.from({ length: 5 }, (_, index) => (
           <span key={index} className="header-rating-star-cell">

@@ -8,7 +8,9 @@ import {
   type KeyboardEvent,
 } from "react";
 import Link from "next/link";
+import { HeroInstallSplit } from "./HeroInstallSplit";
 import { IconCheckCircle, IconCoffee } from "./icons";
+import { INDEED_CWS_URL, SEEK_CWS_URL } from "@/lib/cws";
 import { canStartSubscribe } from "@/lib/legal";
 import { startPaddleCheckout } from "@/lib/paddle-checkout";
 import {
@@ -187,11 +189,9 @@ const PRO_BADGE = "Skip one coffee. Get Pro.";
 export function PricingCards({
   monthlyPriceId,
   yearlyPriceId,
-  installHref,
 }: {
   monthlyPriceId: string;
   yearlyPriceId: string;
-  installHref: string;
 }) {
   const [interval, setInterval] = useState<Interval>("monthly");
   const [pending, setPending] = useState(false);
@@ -317,15 +317,12 @@ export function PricingCards({
               Track Indeed and Seek without paying. Metrics, save, and a local
               board.
             </p>
-            <a
-              href={installHref}
-              className="btn-secondary pricing-card-cta pricing-card-cta-secondary"
-              {...(installHref.startsWith("http")
-                ? { target: "_blank", rel: "noopener noreferrer" }
-                : {})}
-            >
-              Install free
-            </a>
+            <HeroInstallSplit
+              variant="fill"
+              buttonClassName="pricing-card-cta pricing-card-cta-secondary"
+              seekUrl={SEEK_CWS_URL}
+              indeedUrl={INDEED_CWS_URL}
+            />
           </div>
           <ul className="pricing-card-features">
             {FREE_FEATURES.map((feature) => (
@@ -368,6 +365,15 @@ export function PricingCards({
               Best for people who want to hide listings and score a resume
               against the JD.
             </p>
+            <button
+              type="button"
+              className="pricing-card-cta"
+              data-price-id={priceId}
+              disabled={pending}
+              onClick={subscribe}
+            >
+              {pending ? "Starting…" : "Subscribe"}
+            </button>
             <label className="pricing-legal">
               <input
                 type="checkbox"
@@ -395,15 +401,6 @@ export function PricingCards({
                 .
               </span>
             </label>
-            <button
-              type="button"
-              className="pricing-card-cta"
-              data-price-id={priceId}
-              disabled={pending}
-              onClick={subscribe}
-            >
-              {pending ? "Starting…" : "Subscribe"}
-            </button>
           </div>
           <ul className="pricing-card-features">
             {PRO_FEATURES.map((feature) => (

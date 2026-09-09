@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { FeatureBento } from "@/components/FeatureBento";
@@ -9,17 +8,13 @@ import {
   IconShield,
   IconUser,
 } from "@/components/icons";
+import { HeroInstallSplit } from "@/components/HeroInstallSplit";
 import { MarketingShell } from "@/components/MarketingShell";
 import { MeshHero } from "@/components/MeshHero";
 import { GridBand } from "@/components/PageGrid";
 import { Reveal } from "@/components/Reveal";
 import { SupportedMarkets } from "@/components/SupportedMarkets";
-
-const cwsUrl = process.env.NEXT_PUBLIC_CWS_URL || "/#features";
-const SEEK_CWS_URL =
-  "https://chromewebstore.google.com/detail/mpglbfbnhhnbbilpnihnjhcencoijiep";
-const INDEED_CWS_URL =
-  "https://chromewebstore.google.com/detail/lhkokphioeoagcpblnlidbehgpcbpgho";
+import { INDEED_CWS_URL, SEEK_CWS_URL } from "@/lib/cws";
 
 export default function HomePage() {
   return (
@@ -39,16 +34,10 @@ export default function HomePage() {
               <Link href="/pricing" className="btn-primary">
                 Get Pro
               </Link>
-              <a href={cwsUrl} className="btn-secondary">
-                <Image
-                  src="/chrome_logo.webp"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="mr-2"
-                />
-                Install free
-              </a>
+              <HeroInstallSplit
+                seekUrl={SEEK_CWS_URL}
+                indeedUrl={INDEED_CWS_URL}
+              />
             </div>
           </div>
         </MeshHero>
